@@ -7,8 +7,15 @@ use App\Models\Spending;
 
 class SpendingController extends Controller
 {
-    public function getSpendings(Spending $spending) {
-        $spendings = $spending::with('category')->get()->toArray();
+    public function index() {
+        $spendings = Spending::with('category')->get()->toArray();
         return \Response::json([$spendings], 200);
+    }
+
+    public function store(Request $request) {
+        $input = $request->all();
+        Spending::create($input);
+        
+        return \Response::json('Zapis do bazy zakończył się powodzeniem', 200);
     }
 }

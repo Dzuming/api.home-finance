@@ -12,4 +12,5 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::get('/spendings', 'SpendingController@getSpendings')->name('spending.getSpendings');
+Route::get('/spendings', 'SpendingController@index')->name('spending.index');
+Route::post('/spendings', 'SpendingController@store')->name('spending.store');

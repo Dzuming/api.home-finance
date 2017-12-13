@@ -13,7 +13,7 @@ class SpendingTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function it_can_show_users()
+    public function it_can_show_spendings()
     {
         create(Category::class, [
             'name' => 'Zakupy',
@@ -34,7 +34,7 @@ class SpendingTest extends TestCase
             'value' => '22'
         ]);
         
-        $response = $this->json('GET', \URL::Route('spending.getSpendings'));
+        $response = $this->json('GET', \URL::Route('spending.index'));
         $response->assertStatus(200)->assertJsonFragment(
                 [
                     'description' => 'Zakupy biedronka',
@@ -50,4 +50,18 @@ class SpendingTest extends TestCase
                 ]
         );
     }
+
+    /** @test */
+    public function it_can_add_spending()
+    {
+        $spending = [
+            'category_id' => 1,
+            'description' => 'Zakupy biedronka',
+            'value' => '33.24'    
+        ];
+        $response = $this->json('Post', \URL::Route('spending.store', $spending));
+        $response->assertStatus(200);
+        $this->assertDatabaseHas('spendings', $spending);
+    }
+    
 }
