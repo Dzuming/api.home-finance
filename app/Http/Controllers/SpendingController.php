@@ -16,6 +16,12 @@ class SpendingController extends Controller
         $input = $request->all();
         Spending::create($input);
         
-        return \Response::json('Zapis do bazy zakończył się powodzeniem', 200);
+        return \Response::json('Zapis wydatku do bazy zakończył się powodzeniem', 200);
+    }
+
+    public function destroy($id) {
+        Spending::destroy($id);
+        
+        return \Response::json('usunięto z bazy wydatek o id' . $id, 200);
     }
 }

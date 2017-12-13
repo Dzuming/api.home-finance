@@ -64,4 +64,17 @@ class SpendingTest extends TestCase
         $this->assertDatabaseHas('spendings', $spending);
     }
     
+    /** @test */
+    public function it_can_remove_spending()
+    {
+        $spending = [
+            'category_id' => 1,
+            'description' => 'Zakupy biedronka',
+            'value' => '33.24'    
+        ];
+        create(Spending::class, $spending);
+        $response = $this->json('Delete', \URL::Route('spending.destroy', 1));
+        $response->assertStatus(200);
+        $this->assertDatabaseMissing('spendings', $spending);
+    }
 }
