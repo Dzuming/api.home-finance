@@ -12,6 +12,11 @@ class SpendingTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function setUp()
+    {
+        parent::setUp();
+    }
+
     /** @test */
     public function it_can_get_category_that_owns_spendings()
     {

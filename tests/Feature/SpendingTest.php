@@ -12,6 +12,11 @@ class SpendingTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function setUp()
+    {
+        parent::setUp();
+    }
+
     /** @test */
     public function it_can_show_spendings()
     {
