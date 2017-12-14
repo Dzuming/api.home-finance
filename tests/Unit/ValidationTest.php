@@ -27,6 +27,12 @@ class ValidationTest extends TestCase
     public function it_can_validate_spending_post()
     {
         $this->assertTrue($this->validateField('description', 'Zakupy tesco'));
+        $this->assertTrue($this->validateField('category_id', 1));
+        $this->assertFalse($this->validateField('category_id', "eeq"));
+        $this->assertTrue($this->validateField('user_id', 1));
+        $this->assertFalse($this->validateField('user_id', "yry"));
+        $this->assertTrue($this->validateField('value', 22));
+        $this->assertFalse($this->validateField('value', "wrw"));
     }
 
     protected function getFieldValidator($field, $value)
