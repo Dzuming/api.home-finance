@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Spending extends Model
 {
     protected $fillable = [
-        'category_id', 'user_id', 'description', 'value'
+        'category_id', 'description', 'value'
     ];
 
     public function category() {
