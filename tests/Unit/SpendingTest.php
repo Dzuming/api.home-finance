@@ -17,6 +17,10 @@ class SpendingTest extends TestCase
         parent::setUp();
     }
 
+    public function tearDown(){
+        parent::tearDown();
+    }
+
     /** @test */
     public function it_can_get_category_that_owns_spendings()
     {

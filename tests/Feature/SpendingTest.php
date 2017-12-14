@@ -17,6 +17,10 @@ class SpendingTest extends TestCase
         parent::setUp();
     }
 
+    public function tearDown(){
+        parent::tearDown();
+    }
+
     /** @test */
     public function it_can_show_spendings()
     {
