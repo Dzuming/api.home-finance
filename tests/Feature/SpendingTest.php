@@ -17,12 +17,13 @@ class SpendingTest extends TestCase
         parent::setUp();
     }
 
-    public function tearDown(){
+    public function tearDown()
+    {
         parent::tearDown();
     }
 
     /** @test */
-    public function it_can_show_spendings()
+    public function it_can_show_spending()
     {
         create(Category::class, [
             'name' => 'Zakupy',
@@ -42,21 +43,21 @@ class SpendingTest extends TestCase
             'description' => 'Zakupy aldi',
             'value' => '22'
         ]);
-        
+
         $response = $this->json('GET', \URL::Route('spending.index'));
         $response->assertStatus(200)->assertJsonFragment(
-                [
-                    'description' => 'Zakupy biedronka',
-                    'value' => '33.24'
-                ],
-                [
-                    'description' => 'Rachunek gaz',
-                    'value' => '22'
-                ],
-                [
-                    'description' => 'Zakupy aldi',
-                    'value' => '22'
-                ]
+            [
+                'description' => 'Zakupy biedronka',
+                'value' => '33.24'
+            ],
+            [
+                'description' => 'Rachunek gaz',
+                'value' => '22'
+            ],
+            [
+                'description' => 'Zakupy aldi',
+                'value' => '22'
+            ]
         );
     }
 
@@ -66,24 +67,40 @@ class SpendingTest extends TestCase
         $spending = [
             'category_id' => 1,
             'description' => 'Zakupy biedronka',
-            'value' => '33.24'    
+            'value' => '33.24'
         ];
         $response = $this->json('Post', \URL::Route('spending.store', $spending));
         $response->assertStatus(200);
         $this->assertDatabaseHas('spendings', $spending);
     }
-    
+
     /** @test */
     public function it_can_remove_spending()
     {
         $spending = [
             'category_id' => 1,
             'description' => 'Zakupy biedronka',
-            'value' => '33.24'    
+            'value' => '33.24'
         ];
         create(Spending::class, $spending);
         $response = $this->json('Delete', \URL::Route('spending.destroy', 1));
         $response->assertStatus(200);
         $this->assertDatabaseMissing('spendings', $spending);
+    }
+
+    /** @test */
+    public function it_can_edit_spending()
+    {
+        create(Spending::class);
+
+        $input = [
+            'category_id' => 1,
+            'description' => 'Zakupy biedronka',
+            'value' => '33.24'
+        ];
+        $id = 1;
+        $response = $this->json('put', \URL::Route('spending.update', $input, $id));
+        $response->assertStatus(200);
+        $this->assertDatabaseHas('spendings', $input);
     }
 }

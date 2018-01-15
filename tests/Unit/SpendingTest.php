@@ -17,7 +17,8 @@ class SpendingTest extends TestCase
         parent::setUp();
     }
 
-    public function tearDown(){
+    public function tearDown()
+    {
         parent::tearDown();
     }
 
@@ -28,15 +29,15 @@ class SpendingTest extends TestCase
             'id' => 1,
             'name' => 'Zakupy',
         ]);
-        
+
         $newSpending = create(Spending::class, [
             'category_id' => 1,
             'description' => 'Rachunek gaz',
             'value' => '22'
         ]);
-        
+
         $spending = $newSpending::with('category')->get()->toArray();
-        
+
         $this->assertEquals('Zakupy', $spending[0]['category']['name']);
 
     }

@@ -15,3 +15,4 @@ use Illuminate\Http\Request;
 Route::get('/spendings', 'SpendingController@index')->name('spending.index');
 Route::post('/spendings', 'SpendingController@store')->name('spending.store');
 Route::delete('/spendings/{id}', 'SpendingController@destroy')->name('spending.destroy');
+Route::put('/spendings/{id}', 'SpendingController@update')->name('spending.update');
