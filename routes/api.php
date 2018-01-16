@@ -16,3 +16,5 @@ Route::get('/spending', 'SpendingController@index')->name('spending.index');
 Route::post('/spending', 'SpendingController@store')->name('spending.store');
 Route::delete('/spending/{id}', 'SpendingController@destroy')->name('spending.destroy');
 Route::put('/spending/{id}', 'SpendingController@update')->name('spending.update');
+
+Route::get('/profit', 'ProfitController@index')->name('profit.index');
