@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Profit;
 use Illuminate\Http\Request;
+use App\Http\Requests\ProfitRequest;
 
 class ProfitController extends Controller
 {
@@ -13,14 +14,14 @@ class ProfitController extends Controller
         return \Response::json([$spending], 200);
     }
 
-    public function store(Request $request)
+    public function store(ProfitRequest $request)
     {
         $input = $request->all();
         Profit::create($input);
         return \Response::json('Zapis przychodu do bazy zakończył się powodzeniem', 200);
     }
 
-    public function update(Request $request, Profit $profit)
+    public function update(ProfitRequest $request, Profit $profit)
     {
         //
     }
