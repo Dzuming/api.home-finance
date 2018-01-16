@@ -15,7 +15,9 @@ class ProfitController extends Controller
 
     public function store(Request $request)
     {
-        //
+        $input = $request->all();
+        Profit::create($input);
+        return \Response::json('Zapis przychodu do bazy zakończył się powodzeniem', 200);
     }
 
     public function update(Request $request, Profit $profit)

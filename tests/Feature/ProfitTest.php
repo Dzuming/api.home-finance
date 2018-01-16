@@ -60,4 +60,17 @@ class ProfitTest extends TestCase
             ]
         );
     }
+
+    /** @test */
+    public function it_can_add_profit()
+    {
+        $profit = [
+            'category_id' => 1,
+            'description' => 'Zakupy biedronka',
+            'value' => '33.24'
+        ];
+        $response = $this->json('Post', \URL::Route('profit.store', $profit));
+        $response->assertStatus(200);
+        $this->assertDatabaseHas('profits', $profit);
+    }
 }

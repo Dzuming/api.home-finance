@@ -6,7 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Profit extends Model
 {
-    public function category() {
+    protected $fillable = ['category_id', 'description', 'value'];
+
+    public function category()
+    {
         return $this->belongsTo(Category::class);
     }
 }
