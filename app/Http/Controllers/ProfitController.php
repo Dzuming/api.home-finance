@@ -26,8 +26,9 @@ class ProfitController extends Controller
         //
     }
 
-    public function destroy(Profit $profit)
+    public function destroy($id)
     {
-        //
+        Profit::destroy($id);
+        return \Response::json('usunięto z bazy wydatek o id' . $id, 200);
     }
 }

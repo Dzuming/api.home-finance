@@ -74,4 +74,20 @@ class ProfitTest extends TestCase
         $response->assertStatus(200);
         $this->assertDatabaseHas('profits', $profit);
     }
+
+    /** @test */
+    public function it_can_remove_profit()
+    {
+        $profit = [
+            'category_id' => 1,
+            'user_id' => 1,
+            'description' => 'Zakupy biedronka',
+            'value' => '33.24'
+        ];
+        create(profit::class, $profit);
+        $response = $this->json('Delete', \URL::Route('profit.destroy', 1));
+        $response->assertStatus(200);
+        $this->assertDatabaseMissing('profits', $profit);
+    }
+
 }
