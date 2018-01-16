@@ -20,3 +20,4 @@ Route::put('/spending/{id}', 'SpendingController@update')->name('spending.update
 Route::get('/profit', 'ProfitController@index')->name('profit.index');
 Route::post('/profit', 'ProfitController@store')->name('profit.store');
 Route::delete('/profit/{id}', 'ProfitController@destroy')->name('profit.destroy');
+Route::put('/profit/{id}', 'ProfitController@update')->name('profit.update');

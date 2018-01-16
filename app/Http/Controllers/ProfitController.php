@@ -21,14 +21,16 @@ class ProfitController extends Controller
         return \Response::json('Zapis przychodu do bazy zakończył się powodzeniem', 200);
     }
 
-    public function update(ProfitRequest $request, Profit $profit)
+    public function update(Request $request, $id)
     {
-        //
+        $input = $request->all();
+        Profit::find($id)->update($input);
+        return \Response::json('wyedytowano pzychód o id' . $id, 200);
     }
 
     public function destroy($id)
     {
         Profit::destroy($id);
-        return \Response::json('usunięto z bazy wydatek o id' . $id, 200);
+        return \Response::json('usunięto z bazy przychód o id' . $id, 200);
     }
 }

@@ -90,4 +90,20 @@ class ProfitTest extends TestCase
         $this->assertDatabaseMissing('profits', $profit);
     }
 
+    /** @test */
+    public function it_can_edit_profit()
+    {
+        create(Profit::class);
+
+        $input = [
+            'category_id' => 1,
+            'description' => 'Zakupy biedronka',
+            'value' => '33.24'
+        ];
+        $id = 1;
+        $response = $this->json('put', \URL::Route('profit.update', $input, $id));
+        $response->assertStatus(200);
+        $this->assertDatabaseHas('profits', $input);
+    }
+
 }
