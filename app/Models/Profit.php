@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Profit extends Model
 {
-    protected $fillable = ['category_id', 'description', 'value'];
+    protected $fillable = ['category_id', 'user_id', 'description', 'value'];
 
     public function category()
     {

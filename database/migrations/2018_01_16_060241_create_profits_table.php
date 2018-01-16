@@ -16,11 +16,13 @@ class CreateProfitsTable extends Migration
         Schema::create('profits', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('category_id')->unasigned();
+            $table->integer('user_id')->unasigned();
             $table->string('description');
             $table->string('value');
             $table->timestamps();
 
             $table->foreign('category_id')->references('id')->on('categories');
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 

@@ -66,6 +66,7 @@ class ProfitTest extends TestCase
     {
         $profit = [
             'category_id' => 1,
+            'user_id' => 1,
             'description' => 'Zakupy biedronka',
             'value' => '33.24'
         ];
