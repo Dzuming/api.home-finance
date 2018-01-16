@@ -14,7 +14,7 @@ class SpendingController extends Controller
         return \Response::json([$spending], 200);
     }
 
-    public function store(Request $request)
+    public function store(SpendingRequest $request)
     {
         $input = $request->all();
         Spending::create($input);
