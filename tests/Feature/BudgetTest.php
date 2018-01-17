@@ -6,19 +6,14 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\Profit;
 use App\Models\Spending;
-use App\Services\BudgetService;
 
 class BudgetTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected $budgetService;
-
     public function setUp()
     {
         parent::setUp();
-
-        $this->budgetService = new BudgetService;
     }
 
     public function tearDown()
@@ -27,7 +22,7 @@ class BudgetTest extends TestCase
     }
 
     /** @test */
-    public function it_can_show_budget()
+    public function it_can_get_budget()
     {
         create(Profit::class, [
             'value' => '5000.32'
@@ -47,8 +42,10 @@ class BudgetTest extends TestCase
         create(Spending::class, [
             'value' => '434.98'
         ]);
-        $budget = $this->budgetService->getBudget();
 
-        $this->assertEquals(['budget' => 12988.96], $budget);
+        $response = $this->json('GET', \URL::Route('budget.getBudget'));
+        $response->assertStatus(200)->assertJson(
+            ['budget' => 12988.96]
+        );
     }
 }
