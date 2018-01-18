@@ -15,8 +15,8 @@ class CreateProfitsTable extends Migration
     {
         Schema::create('profits', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('category_id')->unasigned();
-            $table->integer('user_id')->unasigned();
+            $table->unsignedInteger('category_id')->unasigned();
+            $table->unsignedInteger('user_id')->unasigned();
             $table->string('description');
             $table->string('value');
             $table->timestamps();

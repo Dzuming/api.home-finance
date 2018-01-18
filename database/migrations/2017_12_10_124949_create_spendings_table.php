@@ -15,8 +15,8 @@ class CreateSpendingsTable extends Migration
     {
         Schema::create('spendings', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('category_id')->unasigned();
-            $table->integer('user_id')->unasigned();
+            $table->unsignedInteger('category_id');
+            $table->unsignedInteger('user_id')->unsigned();
             $table->string('description');
             $table->string('value');
             $table->timestamps();
