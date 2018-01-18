@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\Spending;
 use App\Models\Category;
@@ -11,6 +11,7 @@ use App\Models\Category;
 class SpendingTest extends TestCase
 {
     use RefreshDatabase;
+    use WithoutMiddleware;
 
     public function setUp()
     {

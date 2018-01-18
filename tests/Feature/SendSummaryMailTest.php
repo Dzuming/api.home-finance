@@ -3,11 +3,14 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\SummaryMail;
 
 class SendSummaryMailTest extends TestCase
 {
+    use WithoutMiddleware;
+
     public function setUp()
     {
         parent::setUp();

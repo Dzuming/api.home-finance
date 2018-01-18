@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\Profit;
 use App\Models\Spending;
@@ -10,10 +11,12 @@ use App\Models\Spending;
 class BudgetTest extends TestCase
 {
     use RefreshDatabase;
+    use WithoutMiddleware;
 
     public function setUp()
     {
         parent::setUp();
+
     }
 
     public function tearDown()
