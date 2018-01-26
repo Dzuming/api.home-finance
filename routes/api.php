@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::get('/spending', 'SpendingController@index')->name('spending.index')->middleware('auth:api');
+Route::get('/spending/{id}/{date}', 'SpendingController@index')->name('spending.index')->middleware('auth:api');
 Route::post('/spending', 'SpendingController@store')->name('spending.store')->middleware('auth:api');
 Route::delete('/spending/{id}', 'SpendingController@destroy')->name('spending.destroy')->middleware('auth:api');
 Route::put('/spending/{id}', 'SpendingController@update')->name('spending.update')->middleware('auth:api');

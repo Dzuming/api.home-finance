@@ -24,40 +24,52 @@ class SpendingTest extends TestCase
     }
 
     /** @test */
-    public function it_can_show_spending()
+    public function it_can_show_spending_by_specific_date_and_user()
     {
         create(Category::class, [
+            'id' => 1,
             'name' => 'Zakupy',
         ]);
         create(Spending::class, [
             'category_id' => 1,
-            'description' => 'Zakupy biedronka',
-            'value' => '33.24'
+            'user_id' => 1,
+            'created_at' => '2018-01-22 12:12:12'
+        ]);
+        create(Spending::class, [
+            'category_id' => 2,
+            'user_id' => 2,
+            'created_at' => '2018-01-22 11:12:12'
         ]);
         create(Spending::class, [
             'category_id' => 1,
-            'description' => 'Rachunek gaz',
-            'value' => '22'
-        ]);
-        create(Spending::class, [
-            'category_id' => 1,
-            'description' => 'Zakupy aldi',
-            'value' => '22'
+            'user_id' => 1,
+            'created_at' => '2017-01-22 12:12:12'
         ]);
 
-        $response = $this->json('GET', \URL::Route('spending.index'));
-        $response->assertStatus(200)->assertJsonFragment(
+        create(Spending::class, [
+            'category_id' => 1,
+            'user_id' => 1,
+            'created_at' => '2017-01-22 12:12:12'
+
+        ]);
+        $userId = 1;
+        $date = '2018-01';
+        $response = $this->json('GET', \URL::Route('spending.index', [$userId, $date]));
+        $response->assertStatus(200)->assertJsonMissing([
+            'category_id' => 2,
+            'user_id' => 2,
+            'created_at' => '2018-01-22 11:12:12'
+        ]);
+        $response->assertStatus(200)->assertJson(
             [
-                'description' => 'Zakupy biedronka',
-                'value' => '33.24'
-            ],
-            [
-                'description' => 'Rachunek gaz',
-                'value' => '22'
-            ],
-            [
-                'description' => 'Zakupy aldi',
-                'value' => '22'
+                [
+                    [
+                        'category_id' => "1",
+                        'user_id' => "1",
+                        'created_at' => '2018-01-22 12:12:12'
+                    ]
+                ]
+
             ]
         );
     }

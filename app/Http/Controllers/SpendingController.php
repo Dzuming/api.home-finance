@@ -2,16 +2,32 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\DateService;
 use Illuminate\Http\Request;
 use App\Models\Spending;
 use App\Http\Requests\SpendingRequest;
 
 class SpendingController extends Controller
 {
-    public function index()
+
+    protected $dateService;
+
+    public function __construct(DateService $dateService)
     {
-        $spending = Spending::with('category')->get()->toArray();
+        $this->dateService = $dateService;
+    }
+
+    public function index($id, $date)
+    {
+
+        $spending = Spending::with('category')
+            ->where('user_id', $id)
+            ->whereYear('created_at', $this->dateService->getYear($date))
+            ->whereMonth('created_at', $this->dateService->getMonth($date))
+            ->get()
+            ->toArray();
         return \Response::json([$spending], 200);
+
     }
 
     public function store(SpendingRequest $request)
