@@ -49,13 +49,9 @@ class ProfitTest extends TestCase
         $response->assertStatus(200)->assertJsonFragment(
             [
                 'description' => 'Pensja',
-                'value' => '5000.32'
-            ],
-            [
+                'value' => '5000.32',
                 'description' => 'Pensja',
-                'value' => '3200'
-            ],
-            [
+                'value' => '3200',
                 'description' => 'Pensja',
                 'value' => '4000'
             ]
