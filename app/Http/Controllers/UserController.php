@@ -8,7 +8,7 @@ use App\Models\User;
 class UserController extends Controller
 {
     public function show($email) {
-        $user = User::where('email', $email)->get();
-        return \Response::json([$user], 200);
+        $user = User::where('email', $email)->firstOrFail();
+        return \Response::json($user, 200);
     }
 }
