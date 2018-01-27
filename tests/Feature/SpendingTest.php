@@ -63,13 +63,10 @@ class SpendingTest extends TestCase
         $response->assertStatus(200)->assertJson(
             [
                 [
-                    [
-                        'category_id' => "1",
-                        'user_id' => "1",
-                        'created_at' => '2018-01-22 12:12:12'
-                    ]
+                    'category_id' => "1",
+                    'user_id' => "1",
+                    'created_at' => '2018-01-22 12:12:12'
                 ]
-
             ]
         );
     }

@@ -26,7 +26,7 @@ class SpendingController extends Controller
             ->whereMonth('created_at', $this->dateService->getMonth($date))
             ->get()
             ->toArray();
-        return \Response::json([$spending], 200);
+        return \Response::json($spending, 200);
 
     }
 
