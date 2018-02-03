@@ -78,7 +78,8 @@ class SpendingTest extends TestCase
             'category_id' => 1,
             'user_id' => 1,
             'description' => 'Zakupy biedronka',
-            'value' => '33.24'
+            'value' => '33.24',
+            'created_at' => '2018-01-01 00:00:00'
         ];
         $response = $this->json('Post', \URL::Route('spending.store', $spending));
         $response->assertStatus(200);
