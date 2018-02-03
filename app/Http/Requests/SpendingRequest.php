@@ -28,6 +28,7 @@ class SpendingRequest extends FormRequest
             'category_id' => 'required|numeric',
             'user_id' => 'required|numeric',
             'value' => 'required|numeric',
+            'created_at' => 'required|date'
         ];
     }
 }
