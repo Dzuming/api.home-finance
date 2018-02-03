@@ -25,3 +25,5 @@ Route::put('/profit/{id}', 'ProfitController@update')->name('profit.update')->mi
 Route::get('/budget', 'BudgetController@getBudget')->name('budget.getBudget')->middleware('auth:api');
 
 Route::get('/user/{email}', 'UserController@show')->name('user.show')->middleware('auth:api');
+
+Route::get('/categories', 'CategoryController@getCategories')->name('category.getCategories')->middleware('auth:api');
