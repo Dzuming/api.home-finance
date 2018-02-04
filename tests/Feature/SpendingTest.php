@@ -74,6 +74,10 @@ class SpendingTest extends TestCase
     /** @test */
     public function it_can_add_spending()
     {
+        create(Category::class, [
+            'id' => 1,
+            'name' => 'Zakupy',
+        ]);
         $spending = [
             'category_id' => 1,
             'user_id' => 1,

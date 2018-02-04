@@ -34,10 +34,11 @@ class SpendingController extends Controller
     {
         $input = $request->all();
         $newSpending = Spending::create($input);
+        $newSpendingId = $newSpending->id;
         return \Response::json(
             [
                 'message' => 'Zapis wydatku do bazy zakończył się powodzeniem',
-                'spending' => $newSpending
+                'spending' => Spending::with('category')->find($newSpendingId)
             ], 200);
     }
 
