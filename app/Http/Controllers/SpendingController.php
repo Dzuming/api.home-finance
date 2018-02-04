@@ -33,8 +33,12 @@ class SpendingController extends Controller
     public function store(SpendingRequest $request)
     {
         $input = $request->all();
-        Spending::create($input);
-        return \Response::json('Zapis wydatku do bazy zakończył się powodzeniem', 200);
+        $newSpending = Spending::create($input);
+        return \Response::json(
+            [
+                'message' => 'Zapis wydatku do bazy zakończył się powodzeniem',
+                'spending' => $newSpending
+            ], 200);
     }
 
     public function destroy($id)
