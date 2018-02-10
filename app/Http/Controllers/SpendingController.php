@@ -51,6 +51,7 @@ class SpendingController extends Controller
     public function update(Request $request, $id)
     {
         $input = $request->all();
+        \Log::info($input);
         Spending::find($id)->update($input);
         return \Response::json('wyedytowano wydatek o id' . $id, 200);
     }
