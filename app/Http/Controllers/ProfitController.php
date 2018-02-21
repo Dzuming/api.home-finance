@@ -2,16 +2,29 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\DateService;
 use App\Models\Profit;
 use Illuminate\Http\Request;
 use App\Http\Requests\ProfitRequest;
 
 class ProfitController extends Controller
 {
-    public function index()
+    protected $dateService;
+
+    public function __construct(DateService $dateService)
     {
-        $spending = Profit::with('category')->get()->toArray();
-        return \Response::json([$spending], 200);
+        $this->dateService = $dateService;
+    }
+
+    public function index($id, $date)
+    {
+        $profit = Profit::with('category')
+            ->where('user_id', $id)
+            ->whereYear('created_at', $this->dateService->getYear($date))
+            ->whereMonth('created_at', $this->dateService->getMonth($date))
+            ->get()
+            ->toArray();
+        return \Response::json($profit, 200);
     }
 
     public function store(ProfitRequest $request)
