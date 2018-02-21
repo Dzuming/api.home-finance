@@ -32,20 +32,25 @@ class ProfitTest extends TestCase
         create(Profit::class, [
             'category_id' => 1,
             'description' => 'Pensja',
-            'value' => '5000.32'
+            'value' => '5000.32',
+            'created_at' => '2018-01-22 12:12:12'
         ]);
         create(Profit::class, [
             'category_id' => 1,
             'description' => 'Pensja',
-            'value' => '3200'
+            'value' => '3200',
+            'created_at' => '2018-01-22 12:12:12'
         ]);
         create(Profit::class, [
             'category_id' => 1,
             'description' => 'Pensja',
-            'value' => '4000'
+            'value' => '4000',
+            'created_at' => '2018-01-22 12:12:12'
         ]);
 
-        $response = $this->json('GET', \URL::Route('profit.index'));
+        $userId = 1;
+        $date = '2018-01';
+        $response = $this->json('GET', \URL::Route('profit.index', [$userId, $date]));
         $response->assertStatus(200)->assertJsonFragment(
             [
                 'description' => 'Pensja',
