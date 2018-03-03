@@ -30,25 +30,32 @@ class BudgetServiceTest extends TestCase
     public function it_can_show_budget()
     {
         create(Profit::class, [
+            'user_id' => 1,
             'value' => '5000.32'
         ]);
         create(Profit::class, [
+            'user_id' => 1,
             'value' => '3200'
         ]);
         create(Profit::class, [
+            'user_id' => 1,
             'value' => '4000.00'
         ]);
         create(Spending::class, [
+            'user_id' => 1,
             'value' => '233.21'
         ]);
         create(Spending::class, [
+            'user_id' => 1,
             'value' => '120.45'
         ]);
         create(Spending::class, [
+            'user_id' => 1,
             'value' => '434.98'
         ]);
-        $budget = $this->budgetService->getBudget();
+        $userId = 1;
+        $budget = $this->budgetService->getBudget($userId);
 
-        $this->assertEquals(['budget' => 12988.96], $budget);
+        $this->assertEquals(['budget' => 11411.68], $budget);
     }
 }

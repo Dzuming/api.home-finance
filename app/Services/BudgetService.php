@@ -8,12 +8,12 @@ use App\Models\Profit;
 
 class BudgetService
 {
-    public function getBudget()
+    public function getBudget($userId)
     {
-        $spending = Spending::sum('value');
-        $profit = Profit::sum('value');
+        $spending = Spending::where('user_id', $userId)->sum('value');
+        $profit = Profit::where('user_id', $userId)->sum('value');
         return [
-            'budget' => $spending + $profit
+            'budget' => round($profit - $spending, 2)
         ];
     }
 }

@@ -22,7 +22,7 @@ Route::post('/profit', 'ProfitController@store')->name('profit.store')->middlewa
 Route::delete('/profit/{id}', 'ProfitController@destroy')->name('profit.destroy')->middleware('auth:api');
 Route::put('/profit/{id}', 'ProfitController@update')->name('profit.update')->middleware('auth:api');
 
-Route::get('/budget', 'BudgetController@getBudget')->name('budget.getBudget')->middleware('auth:api');
+Route::get('/budget/{userId}', 'BudgetController@getBudget')->name('budget.getBudget')->middleware('auth:api');
 
 Route::get('/user/{email}', 'UserController@show')->name('user.show')->middleware('auth:api');
 

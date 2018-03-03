@@ -14,9 +14,9 @@ class BudgetController extends Controller
         $this->budgetService = $budgetService;
     }
 
-    public function getBudget()
+    public function getBudget($userId)
     {
-        $budget = $this->budgetService->getBudget();
+        $budget = $this->budgetService->getBudget($userId);
         return \Response::json($budget, 200);
     }
 }
