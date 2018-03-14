@@ -29,3 +29,7 @@ Route::get('/revenue/{userId}/{date}', 'RevenueController@getRevenue')->name('bu
 Route::get('/user/{email}', 'UserController@show')->name('user.show')->middleware('auth:api');
 
 Route::get('/categories', 'CategoryController@getCategories')->name('category.getCategories')->middleware('auth:api');
+
+Route::get('/assumptions/{date}', 'AssumptionsController@getAssumptions')->name('assumptions.getAssumptions')->middleware('auth:api');
+
+
