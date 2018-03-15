@@ -1,3 +1,6 @@
-// our example model is just an Array
-const facets = [];
-export default facets;
+import { dbQueryPromise } from '../lib/util';
+
+export const facets = () => (
+  dbQueryPromise('SELECT * FROM categories')
+);
+

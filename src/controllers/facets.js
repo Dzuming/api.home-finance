@@ -1,5 +1,5 @@
 import resource from 'resource-router-middleware';
-import facets from '../models/facets';
+import { facets } from '../models/facets';
 
 export default ({config, db}) => resource({
 
@@ -17,17 +17,7 @@ export default ({config, db}) => resource({
 
   /** GET / - List all entities */
   index ({params}, res) {
-    db.getConnection(function (err, connection) {
-      connection.query('SELECT * FROM categories', function (error, results, fields) {
-        res.json(results);
-
-        connection.release();
-
-        if (error) throw error;
-
-      });
-    });
-
+    facets().then((response) => res.json(response));
   },
 
   /** POST / - Create a new entity */
