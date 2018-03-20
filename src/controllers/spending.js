@@ -1,5 +1,5 @@
 import resource from 'resource-router-middleware';
-import { spending } from '../models/spending';
+import { getSpendings, postSpending } from '../models/spending';
 
 export default ({config, db}) => resource({
 
@@ -17,14 +17,14 @@ export default ({config, db}) => resource({
 
   /** GET / - List all entities */
   index ({params}, res) {
-  spending().then(result => res.json(result));
+    getSpendings().then(result => res.json(result));
   },
 
   /** POST / - Create a new entity */
-  create ({body}, res) {
-    body.id = spending.length.toString(36);
-    spending.push(body);
-    res.json(body);
+  create (data, res) {
+    const spending = data.body;
+    postSpending(spending);
+    res.json(spending);
   },
 
   /** GET /:id - Return a given entity */

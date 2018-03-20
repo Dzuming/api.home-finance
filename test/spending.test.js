@@ -18,7 +18,7 @@ describe('spending', () => {
     ]);
   });
   it('it should GET all the spending', (done) => {
-    models.Spending.create({value: 333, description: 'test'}).then(()=> {
+    models.Spending.create({value: 333, description: 'test'}).then(() => {
       chai.request(server)
         .get('/api/spending')
         .end((err, res) => {
@@ -28,6 +28,20 @@ describe('spending', () => {
           done();
         });
     });
-    })
+  });
+
+  it('it should POST spending', (done) => {
+    const spending = {value: 1, description: 'test'};
+    chai.request(server)
+      .post('/api/spending')
+      .set('X-API-Key', 'foobar')
+      .send(spending)
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.should.be.a('object');
+        res.body.should.be.eql(spending);
+        done();
+      });
+  });
 
 });

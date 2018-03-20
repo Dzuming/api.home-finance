@@ -1,4 +1,5 @@
 import model from '../../db/models';
 
-export const spending = () => model.Spending.findAll();
+export const getSpendings = () => model.Spending.findAll();
+export const postSpending = spending => model.Spending.create(spending)
 
