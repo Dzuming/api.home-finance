@@ -38,6 +38,6 @@ jobs:
       # run tests!
       - run: yarn create-db
       - run:
-        command: set NODE_ENV=test && set SEQUELIZE_DB_CONFIG=db/config/database.json && mocha test --require babel-register
+        command: mocha test --require babel-register
 
 
