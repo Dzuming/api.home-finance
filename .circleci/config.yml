@@ -37,6 +37,7 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
       # run tests!
       - run: yarn create-db
-      - run: yarn test
+      - run:
+        command: set NODE_ENV=test && set SEQUELIZE_DB_CONFIG=db/config/database.json && mocha test --require babel-register
 
 
