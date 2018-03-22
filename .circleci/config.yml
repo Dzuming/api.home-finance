@@ -10,9 +10,9 @@ jobs:
       - image: circleci/node:7.10
       - image: circleci/mysql:5.6
         environment:
-          MYSQL_ROOT_HOST=%
+          MYSQL_ROOT_HOST=127.0.0.1
           MYSQL_USER=root
-          MYSQL_ALLOW_EMPTY_PASSWORD=true
+          MYSQL_ALLOW_EMPTY_PASSWORD=yes
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
       # documented at https://circleci.com/docs/2.0/circleci-images/
