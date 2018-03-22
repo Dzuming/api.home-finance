@@ -38,6 +38,6 @@ jobs:
       # run tests!
       - run: yarn create-db
       - run:
-        command: mocha test --require babel-register
+        yarn test
 
 
