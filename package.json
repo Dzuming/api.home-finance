@@ -9,7 +9,8 @@
     "start": "node dist",
     "prestart": "npm run -s build",
     "lint": "eslint src",
-    "test": "mocha --require babel-register"
+    "test": "set NODE_ENV=test && set SEQUELIZE_DB_CONFIG=db/config/database.json && mocha --require babel-register",
+    "create-db": "node_modules/.bin/sequelize db:create database_development"
   },
   "eslintConfig": {
     "extends": "eslint:recommended",
