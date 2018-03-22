@@ -17,7 +17,7 @@ jobs:
       # CircleCI maintains a library of pre-built images
       # documented at https://circleci.com/docs/2.0/circleci-images/
       # - image: circleci/mongo:3.4.4
-      - run: mysql -h 127.0.0.1 -u root -p
+
     working_directory: ~/repo
 
     steps:
@@ -36,7 +36,7 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
-
+      - run: mysql -h 127.0.0.1 -u root -p
       # run tests!
       - run: yarn test
 
