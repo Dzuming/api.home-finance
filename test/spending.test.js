@@ -44,4 +44,16 @@ describe('spending', () => {
       });
   });
 
+  it('it should REMOVE spending', (done) => {
+    models.Spending.create({id: 1, value: 333, description: 'test'}).then(() => {
+      chai.request(server)
+        .delete('/api/spending/1')
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.eql({});
+          done();
+        });
+    });
+  });
+
 });

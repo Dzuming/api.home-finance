@@ -1,19 +1,7 @@
 import resource from 'resource-router-middleware';
-import { getSpendings, postSpending } from '../models/spending';
+import { deleteSpending, getSpendings, postSpending } from '../models/spending';
 
 export default ({config, db}) => resource({
-
-  /** Property name to store preloaded entity on `request`. */
-  id: 'spending',
-
-  /** For requests with an `id`, you can auto-load the entity.
-   *  Errors terminate the request, success sets `req[id] = data`.
-   */
-  load (req, id, callback) {
-    let spending = spending.find(facet => facet.id === id),
-      err = spending ? null : 'Not found';
-    callback(err, spending);
-  },
 
   /** GET / - List all entities */
   index ({params}, res) {
@@ -43,8 +31,8 @@ export default ({config, db}) => resource({
   },
 
   /** DELETE /:id - Delete a given entity */
-  delete ({spending: spending}, res) {
-    spending.splice(spending.indexOf(spending), 1);
-    res.sendStatus(204);
+  delete ({id}, res) {
+    deleteSpending(id);
+    res.sendStatus(200);
   }
 });
