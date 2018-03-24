@@ -45,15 +45,36 @@ describe('spending', () => {
   });
 
   it('it should REMOVE spending', (done) => {
-    models.Spending.create({id: 1, value: 333, description: 'test'}).then(() => {
+    const newSpending = {id: 1, value: 333, description: 'test'};
+
+    models.Spending.create(newSpending).then(() => {
       chai.request(server)
         .delete('/api/spending/1')
         .end((err, res) => {
-          res.should.have.status(200);
-          res.body.should.be.eql({});
-          done();
+          models.Spending.findAll().then(spendings => {
+            res.should.have.status(200);
+            spendings.should.be.eql([]);
+            res.body.should.be.eql({id: '1'});
+            done();
+          });
         });
     });
   });
 
+  it('it should EDIT spending', (done) => {
+    const editResult = {value: 331, description: 'test1'};
+    models.Spending.create({id: 1, value: 333, description: 'test'}).then(() => {
+      chai.request(server)
+        .put('/api/spending/1')
+        .set('X-API-Key', 'foobar')
+        .send(editResult)
+        .end((err, res) => {
+          models.Spending.findAll().then(spendings => {
+            res.should.have.status(200);
+            spendings[0].dataValues.should.be.include(editResult);
+            done();
+          });
+        });
+    });
+  });
 });
