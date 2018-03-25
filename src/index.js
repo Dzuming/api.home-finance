@@ -7,11 +7,14 @@ import middleware from './middleware';
 import api from './routes';
 import config from './config.json';
 
+require('./lib/passport');
 let app = express();
 app.server = http.createServer(app);
 
 // logger
 app.use(morgan('dev'));
+
+//app.use(middleware(passport));
 
 // 3rd party middleware
 app.use(cors({

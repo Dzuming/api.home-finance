@@ -1,8 +1,14 @@
 import resource from 'resource-router-middleware';
-import { deleteSpending, getSpendings, postSpending } from '../models/spending';
+import { deleteSpending, editSpending, getSpendings, postSpending } from '../models/spending';
 
 export default ({config, db}) => resource({
+  id: 'spendingId',
 
+  load (req, id, callback) {
+    const spendingId = id,
+      err = spendingId ? null : 'Not found';
+    callback(err, spendingId);
+  },
   /** GET / - List all entities */
   index ({params}, res) {
     getSpendings().then(result => res.json(result));
@@ -17,22 +23,16 @@ export default ({config, db}) => resource({
 
   /** GET /:id - Return a given entity */
   read ({facet: spending}, res) {
-    res.json(spending);
+
   },
 
   /** PUT /:id - Update a given entity */
-  update ({spending: spending, body}, res) {
-    for (let key in body) {
-      if (key !== 'id') {
-        spending[key] = body[key];
-      }
-    }
-    res.sendStatus(204);
+  update ({spendingId, body}, res) {
+    editSpending(spendingId, body).then(() => res.sendStatus(200));
   },
 
   /** DELETE /:id - Delete a given entity */
-  delete ({id}, res) {
-    deleteSpending(id);
-    res.sendStatus(200);
+  delete ({spendingId}, res) {
+    deleteSpending(spendingId).then(() => res.json({id: spendingId}));
   }
 });
