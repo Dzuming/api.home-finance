@@ -14,16 +14,12 @@ app.server = http.createServer(app);
 // logger
 app.use(morgan('dev'));
 
-//app.use(middleware(passport));
-
 // 3rd party middleware
 app.use(cors({
   exposedHeaders: config.corsHeaders
 }));
 
-app.use(bodyParser.json({
-  limit: config.bodyLimit
-}));
+app.use(bodyParser.json({limit: config.bodyLimit}));
 
 app.use(middleware({config}));
 
