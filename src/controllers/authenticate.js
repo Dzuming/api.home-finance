@@ -18,14 +18,7 @@ const authenticate = {
         // generate a signed son web token with the contents of user object and return it in the response
         const userData = user.dataValues;
         const token = jwt.sign(userData, setting.secret);
-        return res.json({
-          user: {
-            id: userData.id,
-            name: userData.name,
-            email: userData.email
-          },
-          token
-        });
+        return res.json({token});
       });
     })(req, res);
   }
