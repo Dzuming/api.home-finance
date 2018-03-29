@@ -17,14 +17,31 @@ describe('spending', () => {
       models.Spending.destroy({truncate: true})
     ]);
   });
-  it('it should GET all the spending', (done) => {
-    models.Spending.create({value: 333, description: 'test'}).then(() => {
+  it('it should GET all the spending by user and date', (done) => {
+    models.Spending.bulkCreate([{
+      value: 333, description: 'test', userId: 1, period: '2018-03'
+    }, {
+      value: 655, description: 'test1', userId: 1, period: '2018-03'
+    }, {
+      value: 655, description: 'test1', userId: 2, period: '2018-03'
+    }
+    ]).then(() => {
       chai.request(server)
-        .get('/api/spending')
+        .get('/api/spending/1/2018-03')
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.a('array');
-          res.body.length.should.be.eql(1);
+          res.body[0].should.include({
+            value: 333,
+            description: 'test',
+            userId: 1,
+            period: '2018-03'
+          }, {
+            value: 655,
+            description: 'test1',
+            userId: 1,
+            period: '2018-03'
+          });
           done();
         });
     });

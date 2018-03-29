@@ -11,7 +11,7 @@ export default ({config, db}) => resource({
   },
   /** GET / - List all entities */
   index ({params}, res) {
-    getSpendings().then(result => res.json(result));
+
   },
 
   /** POST / - Create a new entity */
@@ -22,8 +22,7 @@ export default ({config, db}) => resource({
   },
 
   /** GET /:id - Return a given entity */
-  read ({facet: spending}, res) {
-
+  read ({spendingId}, res) {
   },
 
   /** PUT /:id - Update a given entity */
@@ -35,4 +34,8 @@ export default ({config, db}) => resource({
   delete ({spendingId}, res) {
     deleteSpending(spendingId).then(() => res.json({id: spendingId}));
   }
-});
+}
+);
+export const getSpendingByUserAndDate = (req, res) => {
+  getSpendings(req.params).then(result => res.json(result))
+}
