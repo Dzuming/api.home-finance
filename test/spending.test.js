@@ -19,11 +19,11 @@ describe('spending', () => {
   });
   it('it should GET all the spending by user and date', (done) => {
     models.Spending.bulkCreate([{
-      value: 333, description: 'test', userId: 1, period: '2018-03'
+      value: 333, description: 'test', categoryId:1,  userId: 1, period: '2018-03'
     }, {
-      value: 655, description: 'test1', userId: 1, period: '2018-03'
+      value: 655, description: 'test1', categoryId:1, userId: 1, period: '2018-03'
     }, {
-      value: 655, description: 'test1', userId: 2, period: '2018-03'
+      value: 655, description: 'test1', categoryId:1, userId: 2, period: '2018-03'
     }
     ]).then(() => {
       chai.request(server)
@@ -35,11 +35,13 @@ describe('spending', () => {
             value: 333,
             description: 'test',
             userId: 1,
+            categoryId:1,
             period: '2018-03'
           }, {
             value: 655,
             description: 'test1',
             userId: 1,
+            categoryId:1,
             period: '2018-03'
           });
           done();
