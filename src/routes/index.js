@@ -4,6 +4,7 @@ import { getProfitsByUserAndDate } from '../controllers/profit';
 import user from '../controllers/user';
 import authenticate from '../controllers/authenticate';
 import category from '../controllers/category';
+import { getBudget } from '../controllers/budget';
 
 export default ({config, db}) => {
   let api = Router();
@@ -19,5 +20,8 @@ export default ({config, db}) => {
   api.use('/categories', category());
 
   api.post('/authenticate', authenticate.token);
+
+  api.get('/budget/:userId', getBudget);
+
   return api;
 }
