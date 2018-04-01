@@ -3,7 +3,7 @@ import category from '../controllers/category';
 
 export const getSpendings = ({userId, period}) => model.Spending.findAll({
   where: {userId, period},
-  attributes: ['value', 'description', 'period'],
+  attributes: ['id', 'value', 'description', 'period'],
   include: [{
     model: model.Category,
     as: 'category',

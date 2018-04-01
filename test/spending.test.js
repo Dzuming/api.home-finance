@@ -22,11 +22,11 @@ describe('spending', () => {
   });
   it('it should GET all the spending by user and date', (done) => {
     const spending = [{
-      value: 333, description: 'test', categoryId: 1, userId: 1, period: '2018-03'
+      id: 1, value: 333, description: 'test', categoryId: 1, userId: 1, period: '2018-03'
     }, {
-      value: 655, description: 'test1', categoryId: 1, userId: 1, period: '2018-03'
+      id: 2, value: 655, description: 'test1', categoryId: 1, userId: 1, period: '2018-03'
     }, {
-      value: 655, description: 'test1', categoryId: 1, userId: 2, period: '2018-03'
+      id: 3, value: 655, description: 'test1', categoryId: 1, userId: 2, period: '2018-03'
     }];
     models.Spending.bulkCreate(spending).then(() => {
       chai.request(server)
@@ -35,11 +35,13 @@ describe('spending', () => {
           res.should.have.status(200);
           res.body.should.be.a('array');
           res.body[0].should.eql({
+            id: 1,
             value: 333,
             description: 'test',
             category: {id: 1, name: 'jedzenie'},
             period: '2018-03'
           }, {
+            id: 2,
             value: 655,
             description: 'test1',
             category: {id: 1, name: 'jedzenie'},
