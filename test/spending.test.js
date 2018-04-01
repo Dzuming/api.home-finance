@@ -91,11 +91,9 @@ describe('spending', () => {
         .set('X-API-Key', 'foobar')
         .send(editResult)
         .end((err, res) => {
-          models.Spending.findAll().then(spendings => {
-            res.should.have.status(200);
-            spendings[0].dataValues.should.be.include(editResult);
-            done();
-          });
+          res.should.have.status(200);
+          res.body.should.be.eql('wyedytowano wydatek o id 1');
+          done();
         });
     });
   });
