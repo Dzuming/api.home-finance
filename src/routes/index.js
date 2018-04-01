@@ -13,7 +13,7 @@ export default ({config, db}) => {
 
   api.use('/spending/:userId/:period', getSpendingByUserAndDate);
 
-  api.use('/profits/:userId/:period', getProfitsByUserAndDate);
+  api.use('/profit/:userId/:period', getProfitsByUserAndDate);
 
   api.use('/user', user());
 

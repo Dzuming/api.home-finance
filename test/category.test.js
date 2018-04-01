@@ -14,7 +14,7 @@ describe('category', () => {
 
   beforeEach(function () {
     return bluebird.all([
-      models.Category.destroy({truncate: true})
+      models.Category.destroy({truncate: {cascade: true}})
     ]);
   });
   it('it should GET categories', (done) => {

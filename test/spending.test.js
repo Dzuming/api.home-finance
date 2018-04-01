@@ -9,23 +9,26 @@ let should = chai.should();
 chai.use(chaiHttp);
 describe('spending', () => {
   before(function () {
-    return models.sequelize.sync();
+    models.sequelize.sync();
   });
 
   beforeEach(function () {
     return bluebird.all([
-      models.Spending.destroy({truncate: true})
+      models.Spending.destroy({truncate: {cascade: true}}).then(() => {
+        models.Category.destroy({truncate: {cascade: true}});
+        models.Category.create({id: 1, name: 'jedzenie'});
+      })
     ]);
   });
   it('it should GET all the spending by user and date', (done) => {
-    models.Spending.bulkCreate([{
-      value: 333, description: 'test', categoryId:1,  userId: 1, period: '2018-03'
+    const spending = [{
+      value: 333, description: 'test', categoryId: 1, userId: 1, period: '2018-03'
     }, {
-      value: 655, description: 'test1', categoryId:1, userId: 1, period: '2018-03'
+      value: 655, description: 'test1', categoryId: 1, userId: 1, period: '2018-03'
     }, {
-      value: 655, description: 'test1', categoryId:1, userId: 2, period: '2018-03'
-    }
-    ]).then(() => {
+      value: 655, description: 'test1', categoryId: 1, userId: 2, period: '2018-03'
+    }];
+    models.Spending.bulkCreate(spending).then(() => {
       chai.request(server)
         .get('/api/spending/1/2018-03')
         .end((err, res) => {
@@ -35,13 +38,13 @@ describe('spending', () => {
             value: 333,
             description: 'test',
             userId: 1,
-            categoryId:1,
+            categoryId: 1,
             period: '2018-03'
           }, {
             value: 655,
             description: 'test1',
             userId: 1,
-            categoryId:1,
+            categoryId: 1,
             period: '2018-03'
           });
           done();
@@ -50,7 +53,7 @@ describe('spending', () => {
   });
 
   it('it should POST spending', (done) => {
-    const spending = {value: 1, description: 'test'};
+    const spending = {value: 1, categoryId: 1, description: 'test'};
     chai.request(server)
       .post('/api/spending')
       .set('X-API-Key', 'foobar')
@@ -64,7 +67,7 @@ describe('spending', () => {
   });
 
   it('it should REMOVE spending', (done) => {
-    const newSpending = {id: 1, value: 333, description: 'test'};
+    const newSpending = {id: 1, value: 333, categoryId: 1, description: 'test'};
 
     models.Spending.create(newSpending).then(() => {
       chai.request(server)
@@ -96,4 +99,27 @@ describe('spending', () => {
         });
     });
   });
-});
+
+  it('it should belongs to  category', (done) => {
+    const spending = {id: 1, value: 333, description: 'test', categoryId: 1};
+    models.Spending.create(spending, {
+      include: [{
+        model: models.Category,
+        as: 'category',
+        attributes: ['id', 'name']
+      }]
+    }).then(() => {
+      models.Spending.findAll({
+        include: [{
+          model: models.Category,
+          as: 'category',
+          attributes: ['id', 'name']
+        }]
+      }).then(result => {
+        result[0].dataValues.category.dataValues.should.be.eql({id: 1, name: 'jedzenie'});
+        done();
+      });
+    });
+  });
+})
+;

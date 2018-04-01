@@ -7,8 +7,8 @@ module.exports = (sequelize, DataTypes) => {
     userId: DataTypes.INTEGER,
     period: DataTypes.STRING
   }, {});
-  Profit.associate = function(models) {
-    // associations can be defined here
+  Profit.associate = function (models) {
+    Profit.belongsTo(models.Category, {as: 'category'});
   };
   return Profit;
 };

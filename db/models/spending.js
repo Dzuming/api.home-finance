@@ -7,8 +7,8 @@ module.exports = (sequelize, DataTypes) => {
     userId: DataTypes.INTEGER,
     period: DataTypes.STRING
   }, {});
-  Spending.associate = function(models) {
-    // associations can be defined here
+  Spending.associate = function (models) {
+    Spending.belongsTo(models.Category, {as: 'category'});
   };
   return Spending;
 };

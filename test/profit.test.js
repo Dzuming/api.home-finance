@@ -14,7 +14,10 @@ describe('profits', () => {
 
   beforeEach(function () {
     return bluebird.all([
-      models.Profit.destroy({truncate: true})
+      models.Profit.destroy({truncate: {cascade: true}}).then(() => {
+        models.Category.destroy({truncate: {cascade: true}});
+        models.Category.create({id: 1, name: 'jedzenie'});
+      })
     ]);
   });
   it('it should GET all the profits by user and date', (done) => {
@@ -27,7 +30,7 @@ describe('profits', () => {
     }
     ]).then(() => {
       chai.request(server)
-        .get('/api/profits/1/2018-03')
+        .get('/api/profit/1/2018-03')
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.a('array');
@@ -44,6 +47,28 @@ describe('profits', () => {
           });
           done();
         });
+    });
+  });
+
+  it('it should belongs to category', (done) => {
+    const profit = {id: 1, value: 333, description: 'test', categoryId: 1};
+    models.Profit.create(profit, {
+      include: [{
+        model: models.Category,
+        as: 'category',
+        attributes: ['id', 'name']
+      }]
+    }).then(() => {
+      models.Profit.findAll({
+        include: [{
+          model: models.Category,
+          as: 'category',
+          attributes: ['id', 'name']
+        }]
+      }).then(result => {
+        result[0].dataValues.category.dataValues.should.be.eql({id: 1, name: 'jedzenie'});
+        done();
+      });
     });
   });
 });
