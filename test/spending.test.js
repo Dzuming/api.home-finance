@@ -34,17 +34,15 @@ describe('spending', () => {
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.a('array');
-          res.body[0].should.include({
+          res.body[0].should.eql({
             value: 333,
             description: 'test',
-            userId: 1,
-            categoryId: 1,
+            category: {id: 1, name: 'jedzenie'},
             period: '2018-03'
           }, {
             value: 655,
             description: 'test1',
-            userId: 1,
-            categoryId: 1,
+            category: {id: 1, name: 'jedzenie'},
             period: '2018-03'
           });
           done();
