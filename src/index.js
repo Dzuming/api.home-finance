@@ -20,7 +20,7 @@ const loggerstream = {
 };
 app.use(morgan('common', {
   stream: loggerstream,
-  skip: function (req, res) { return res.statusCode > 400; }
+  skip: function (req, res) { return res.statusCode < 400; }
 }));
 
 // 3rd party middleware
