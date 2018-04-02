@@ -6,13 +6,22 @@ import bodyParser from 'body-parser';
 import middleware from './middleware';
 import api from './routes';
 import config from './config.json';
+import logger from './lib/logger'
 
 require('./lib/passport');
 let app = express();
 app.server = http.createServer(app);
 
 // logger
-app.use(morgan('dev'));
+const loggerstream = {
+  write: function (message, encoding) {
+    logger.info(message);
+  }
+};
+app.use(morgan('common', {
+  stream: loggerstream,
+  skip: function (req, res) { return res.statusCode > 400; }
+}));
 
 // 3rd party middleware
 app.use(cors({
@@ -20,7 +29,6 @@ app.use(cors({
 }));
 
 app.use(bodyParser.json({limit: config.bodyLimit}));
-
 app.use(middleware({config}));
 
 app.use('/api', api({config}));

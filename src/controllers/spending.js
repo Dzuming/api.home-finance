@@ -17,8 +17,8 @@ export default ({config, db}) => resource({
     /** POST / - Create a new entity */
     create (data, res) {
       const spending = data.body;
-      postSpending(spending);
-      res.json(spending);
+      console.log('test')
+      postSpending(spending).then(() => res.json(spending));
     },
 
     /** GET /:id - Return a given entity */
