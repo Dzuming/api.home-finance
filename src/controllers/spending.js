@@ -1,5 +1,6 @@
 import resource from 'resource-router-middleware';
 import { deleteSpending, editSpending, getSpendings, postSpending } from '../models/spending';
+import logger from '../lib/logger';
 
 export default ({config, db}) => resource({
     id: 'spendingId',
@@ -17,8 +18,11 @@ export default ({config, db}) => resource({
     /** POST / - Create a new entity */
     create (data, res) {
       const spending = data.body;
-      console.log('test')
-      postSpending(spending).then(() => res.json(spending));
+      console.log(spending)
+      postSpending(spending)
+        .then(() => res.json(spending))
+        .catch(error => logger.error(error));
+
     },
 
     /** GET /:id - Return a given entity */
