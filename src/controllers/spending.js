@@ -18,7 +18,6 @@ export default ({config, db}) => resource({
     /** POST / - Create a new entity */
     create (data, res) {
       const spending = data.body;
-      console.log(spending)
       postSpending(spending)
         .then(() => res.json(spending))
         .catch(error => logger.error(error));
@@ -31,15 +30,21 @@ export default ({config, db}) => resource({
 
     /** PUT /:id - Update a given entity */
     update ({spendingId, body}, res) {
-      editSpending(spendingId, body).then(() => res.json(`wyedytowano wydatek o id ${spendingId}`));
+      editSpending(spendingId, body)
+        .then(() => res.json(`wyedytowano wydatek o id ${spendingId}`))
+        .catch(error => logger.error(error));
     },
 
     /** DELETE /:id - Delete a given entity */
     delete ({spendingId}, res) {
-      deleteSpending(spendingId).then(() => res.json({id: spendingId}));
+      deleteSpending(spendingId)
+        .then(() => res.json({id: spendingId}))
+        .catch(error => logger.error(error));
     }
   }
 );
 export const getSpendingByUserAndDate = (req, res) => {
-  getSpendings(req.params).then(result => res.json(result));
+  getSpendings(req.params)
+    .then(result => res.json(result))
+    .catch(error => logger.error(error));
 };

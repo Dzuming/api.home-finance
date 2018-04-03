@@ -8,30 +8,27 @@ let should = chai.should();
 
 chai.use(chaiHttp);
 describe('budget', () => {
-  before(function () {
-    return models.sequelize.sync();
-  });
 
   beforeEach(function () {
-    return bluebird.all([
-      models.Profit.destroy({truncate: true}),
-      models.Spending.destroy({truncate: true})
-    ]);
+    return models.sequelize.drop()
+      .then(() => models.sequelize.sync())
+      .then(() => models.Category.create({id: 1, name: 'jedzenie'})
+      );
   });
   it('it should GET budget', (done) => {
     const profit = [{
-      value: 300, description: 'test', userId: 1, period: '2018-03'
+      value: 300, description: 'test', userId: 1, categoryId: 1, period: '2018-03'
     }, {
-      value: 300, description: 'test1', userId: 1, period: '2018-03'
+      value: 300, description: 'test1', userId: 1, categoryId: 1, period: '2018-03'
     }, {
-      value: 300, description: 'test1', userId: 2, period: '2018-03'
+      value: 300, description: 'test1', userId: 2, categoryId: 1, period: '2018-03'
     }];
     const spending = [{
-      value: 100, description: 'test', userId: 1, period: '2018-03'
+      value: 100, description: 'test', userId: 1, categoryId: 1, period: '2018-03'
     }, {
-      value: 100, description: 'test1', userId: 1, period: '2018-03'
+      value: 100, description: 'test1', userId: 1, categoryId: 1, period: '2018-03'
     }, {
-      value: 100, description: 'test1', userId: 2, period: '2018-03'
+      value: 100, description: 'test1', userId: 2, categoryId: 1, period: '2018-03'
     }];
     const initialData = bluebird.all([
       models.Profit.bulkCreate(profit),
@@ -51,11 +48,11 @@ describe('budget', () => {
 
   it('it should GET budget if no profits', (done) => {
     const spending = [{
-      value: 100, description: 'test', userId: 1, period: '2018-03'
+      value: 100, description: 'test', userId: 1, categoryId: 1, period: '2018-03'
     }, {
-      value: 100, description: 'test1', userId: 1, period: '2018-03'
+      value: 100, description: 'test1', userId: 1, categoryId: 1, period: '2018-03'
     }, {
-      value: 100, description: 'test1', userId: 2, period: '2018-03'
+      value: 100, description: 'test1', userId: 2, categoryId: 1, period: '2018-03'
     }];
     const initialData = bluebird.all([
       models.Spending.bulkCreate(spending)
@@ -74,11 +71,11 @@ describe('budget', () => {
 
   it('it should GET budget if no spendings', (done) => {
     const profit = [{
-      value: 100, description: 'test', userId: 1, period: '2018-03'
+      value: 100, description: 'test', userId: 1, categoryId: 1, period: '2018-03'
     }, {
-      value: 100, description: 'test1', userId: 1, period: '2018-03'
+      value: 100, description: 'test1', userId: 1, categoryId: 1, period: '2018-03'
     }, {
-      value: 100, description: 'test1', userId: 2, period: '2018-03'
+      value: 100, description: 'test1', userId: 2, categoryId: 1, period: '2018-03'
     }];
     const initialData = bluebird.all([
       models.Profit.bulkCreate(profit)

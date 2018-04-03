@@ -9,11 +9,15 @@ const logger = () => {
   }
 
   return new winston.Logger({
-      transports: [
-        new winston.transports.File({filename: `${dir}/error.log`})
-      ],
-      exitOnError: false
-    });
+    transports: [
+      new winston.transports.File({
+        file: 'error',
+        filename: `${dir}/error.log`,
+        level: 'error'
+      })
+    ],
+    exitOnError: false
+  });
 };
 
 export default logger();

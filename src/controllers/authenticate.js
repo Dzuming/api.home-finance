@@ -1,11 +1,13 @@
 import passport from 'passport';
 import jwt from 'jsonwebtoken';
 import setting from '../../env';
+import logger from '../lib/logger';
 
 const authenticate = {
   token: (req, res) => {
     passport.authenticate('local', {session: false}, (err, user, info) => {
       if (err || !user) {
+        logger.error(err);
         return res.status(400).json({
           message: 'Something is not right',
           user: user
@@ -13,6 +15,7 @@ const authenticate = {
       }
       req.login(user, {session: false}, (err) => {
         if (err) {
+          logger.error(err);
           res.send(err);
         }
         // generate a signed son web token with the contents of user object and return it in the response

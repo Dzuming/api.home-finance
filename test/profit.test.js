@@ -8,17 +8,11 @@ let should = chai.should();
 
 chai.use(chaiHttp);
 describe('profits', () => {
-  before(function () {
-    return models.sequelize.sync();
-  });
-
   beforeEach(function () {
-    return bluebird.all([
-      models.Profit.destroy({truncate: {cascade: true}}).then(() => {
-        models.Category.destroy({truncate: {cascade: true}});
-        models.Category.create({id: 1, name: 'jedzenie'});
-      })
-    ]);
+    return models.sequelize.drop()
+      .then(() => models.sequelize.sync())
+      .then(() => models.Category.create({id: 1, name: 'jedzenie'})
+      );
   });
   it('it should GET all the profits by user and date', (done) => {
     models.Profit.bulkCreate([{
@@ -53,7 +47,7 @@ describe('profits', () => {
   });
 
   it('it should belongs to category', (done) => {
-    const profit = {id: 1, value: 333, description: 'test', categoryId: 1};
+    const profit = {id: 1, value: 333, description: 'test', period: '2018-4', userId: 1, categoryId: 1};
     models.Profit.create(profit, {
       include: [{
         model: models.Category,

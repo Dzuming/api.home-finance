@@ -1,5 +1,6 @@
 import resource from 'resource-router-middleware';
 import { getUserByEmail } from '../models/user';
+import logger from '../lib/logger';
 
 export default () => resource({
   id: 'email',
@@ -12,10 +13,12 @@ export default () => resource({
 
   /** GET /:id - Return a given entity */
   read ({email}, res) {
-    getUserByEmail(email).then(result => res.json({
-      id: result.id,
-      name: result.name,
-      email: result.email,
-    }));
+    getUserByEmail(email)
+      .then(result => res.json({
+        id: result.id,
+        name: result.name,
+        email: result.email,
+      }))
+      .catch(error => logger.error(error));
   },
 });

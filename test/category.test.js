@@ -8,14 +8,9 @@ let should = chai.should();
 
 chai.use(chaiHttp);
 describe('category', () => {
-  before(function () {
-    return models.sequelize.sync();
-  });
-
   beforeEach(function () {
-    return bluebird.all([
-      models.Category.destroy({truncate: {cascade: true}})
-    ]);
+    return models.sequelize.drop()
+      .then(() => models.sequelize.sync());
   });
   it('it should GET categories', (done) => {
     const category = {

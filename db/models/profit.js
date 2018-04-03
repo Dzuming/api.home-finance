@@ -1,11 +1,26 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   var Profit = sequelize.define('Profit', {
-    description: DataTypes.STRING,
-    value: DataTypes.INTEGER,
-    categoryId: DataTypes.INTEGER,
-    userId: DataTypes.INTEGER,
-    period: DataTypes.STRING
+    description: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    value: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    categoryId: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    period: {
+      type: DataTypes.STRING,
+      allowNull: false
+    }
   }, {});
   Profit.associate = function (models) {
     Profit.belongsTo(models.Category, {as: 'category'});
