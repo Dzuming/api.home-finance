@@ -1,4 +1,4 @@
-import { getProfitById, getProfits, postProfit, deleteProfit } from '../models/profit';
+import { getProfitById, getProfits, postProfit, deleteProfit, editProfit } from '../models/profit';
 import logger from '../lib/logger';
 import resource from 'resource-router-middleware';
 
@@ -28,6 +28,14 @@ export default () => resource({
         .catch(error => logger.error(error)))
       .catch(error => logger.error(error));
   },
+
+  /** PUT /:id - Update a given entity */
+  update ({profitId, body}, res) {
+    editProfit(profitId, body)
+      .then(() => res.json(`wyedytowano zysk o id ${profitId}`))
+      .catch(error => logger.error(error));
+  },
+
   /** DELETE /:id - Delete a given entity */
   delete ({profitId}, res) {
     deleteProfit(profitId)

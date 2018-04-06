@@ -70,6 +70,45 @@ describe('profits', () => {
       });
   });
 
+  it('it should REMOVE pofit', (done) => {
+    const newProfit = {id: 1, value: 333, categoryId: 1, period: '2018-4', userId: 1, description: 'test'};
+    models.Profit.create(newProfit).then(() => {
+      chai.request(server)
+        .delete('/api/profit/1')
+        .end((err, res) => {
+          models.Profit.findAll().then(profits => {
+            res.should.have.status(200);
+            profits.should.be.eql([]);
+            res.body.should.be.eql({id: '1'});
+            done();
+          });
+        });
+    });
+  });
+
+  it('it should EDIT spending', (done) => {
+    const editResult = {value: 331, description: 'test1'};
+    models.Profit.create({
+      id: 1,
+      value: 333,
+      period: '2018-4',
+      userId: 1,
+      categoryId: 1,
+      description: 'test'
+    }).then(() => {
+      chai.request(server)
+        .put('/api/profit/1')
+        .set('X-API-Key', 'foobar')
+        .send(editResult)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.eql('wyedytowano zysk o id 1');
+          done();
+        });
+    });
+  });
+
+
   it('it should belongs to category', (done) => {
     const profit = {id: 1, value: 333, description: 'test', period: '2018-4', userId: 1, categoryId: 1};
     models.Profit.create(profit, {
