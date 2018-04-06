@@ -1,4 +1,4 @@
-import { getProfitById, getProfits, postProfit } from '../models/profit';
+import { getProfitById, getProfits, postProfit, deleteProfit } from '../models/profit';
 import logger from '../lib/logger';
 import resource from 'resource-router-middleware';
 
@@ -28,6 +28,12 @@ export default () => resource({
         .catch(error => logger.error(error)))
       .catch(error => logger.error(error));
   },
+  /** DELETE /:id - Delete a given entity */
+  delete ({profitId}, res) {
+    deleteProfit(profitId)
+      .then(() => res.json({id: profitId}))
+      .catch(error => logger.error(error));
+  }
 })
 
 export const getProfitsByUserAndDate = (req, res) => {
