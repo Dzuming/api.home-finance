@@ -1,5 +1,5 @@
 import resource from 'resource-router-middleware';
-import { deleteSpending, editSpending, getSpendings, getSpendingsById, postSpending } from '../models/spending';
+import { deleteSpending, editSpending, getSpendings, getSpendingById, postSpending } from '../models/spending';
 import logger from '../lib/logger';
 
 export default ({config, db}) => resource({
@@ -19,15 +19,14 @@ export default ({config, db}) => resource({
     create (data, res) {
       const spending = data.body;
       postSpending(spending)
-        .then(response => getSpendingsById(response.id)
-          .then(spendings =>
+        .then(response => getSpendingById(response.id)
+          .then(resSpending =>
             res.json({
-              spending: spendings,
+              spending: resSpending,
               message: `Dodano wydatek o id ${response.id}`
             }))
           .catch(error => logger.error(error)))
         .catch(error => logger.error(error));
-
     },
 
     /** GET /:id - Return a given entity */

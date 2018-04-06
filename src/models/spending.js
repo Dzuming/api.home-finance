@@ -10,7 +10,7 @@ export const getSpendings = ({userId, period}) => model.Spending.findAll({
     attributes: ['id', 'name']
   }]
 });
-export const getSpendingsById = id => model.Spending.find({
+export const getSpendingById = id => model.Spending.find({
   where: {id},
   attributes: ['id', 'value', 'description', 'period'],
   include: [{

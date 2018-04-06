@@ -46,6 +46,30 @@ describe('profits', () => {
     });
   });
 
+  it('it should POST profit', (done) => {
+    const profit = {id: 1, value: 1, categoryId: 1, period: '2018-04', userId: 1, description: 'test'};
+    chai.request(server)
+      .post('/api/profit')
+      .set('X-API-Key', 'foobar')
+      .send(profit)
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.should.be.a('object');
+        res.body.profit.should.be.eql({
+          id: 1,
+          value: 1,
+          period: '2018-04',
+          description: 'test',
+          category: {
+            id: 1,
+            name: 'jedzenie'
+          }
+        });
+        res.body.message.should.be.eql(`Dodano zysk o id ${profit.id}`);
+        done();
+      });
+  });
+
   it('it should belongs to category', (done) => {
     const profit = {id: 1, value: 333, description: 'test', period: '2018-4', userId: 1, categoryId: 1};
     models.Profit.create(profit, {
