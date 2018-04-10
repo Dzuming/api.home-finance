@@ -44,7 +44,7 @@ export default () => resource({
   }
 })
 
-export const getProfitsByUserAndDate = (req, res) => {
+export const getProfitsByUser = (req, res) => {
   getProfits(req.params)
     .then(result => res.json(result))
     .catch(error => logger.error(error));
