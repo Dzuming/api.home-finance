@@ -1,8 +1,8 @@
 import model from '../../db/models';
 import category from '../controllers/category';
 
-export const getSpendings = ({userId, period}) => model.Spending.findAll({
-  where: {userId, period},
+export const getSpendings = ({userId}) => model.Spending.findAll({
+  where: {userId},
   attributes: ['id', 'value', 'description', 'period'],
   include: [{
     model: model.Category,

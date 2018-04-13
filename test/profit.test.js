@@ -24,7 +24,7 @@ describe('profits', () => {
     }
     ]).then(() => {
       chai.request(server)
-        .get('/api/profit/1/2018-03')
+        .get('/api/profit/user/1')
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.a('array');

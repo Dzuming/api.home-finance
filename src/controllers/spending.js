@@ -48,7 +48,7 @@ export default ({config, db}) => resource({
     }
   }
 );
-export const getSpendingByUserAndDate = (req, res) => {
+export const getSpendingByUser = (req, res) => {
   getSpendings(req.params)
     .then(result => res.json(result))
     .catch(error => logger.error(error));

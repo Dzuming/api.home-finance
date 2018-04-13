@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import spending, { getSpendingByUserAndDate } from '../controllers/spending';
-import profit, { getProfitsByUserAndDate } from '../controllers/profit';
+import spending, { getSpendingByUser } from '../controllers/spending';
+import profit, { getProfitsByUser } from '../controllers/profit';
 import user from '../controllers/user';
 import authenticate from '../controllers/authenticate';
 import category from '../controllers/category';
@@ -12,9 +12,9 @@ export default ({config, db}) => {
   api.use('/spending', spending({config, db}));
 
   api.use('/profit', profit({config, db}));
-  api.use('/spending/:userId/:period', getSpendingByUserAndDate);
+  api.use('/spending/user/:userId', getSpendingByUser);
 
-  api.use('/profit/:userId/:period', getProfitsByUserAndDate);
+  api.use('/profit/user/:userId', getProfitsByUser);
 
   api.use('/user', user());
 

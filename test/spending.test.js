@@ -24,7 +24,7 @@ describe('spending', () => {
     }];
     models.Spending.bulkCreate(spending).then(() => {
       chai.request(server)
-        .get('/api/spending/1/2018-03')
+        .get('/api/spending/user/1')
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.a('array');
