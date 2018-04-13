@@ -1,5 +1,5 @@
 import Sequelize from 'sequelize';
-import setting from '../env';
+import setting from './env';
 
 const sequelize = new Sequelize(setting.database, setting.user, setting.password, {
   host: setting.host,
