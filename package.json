@@ -46,7 +46,8 @@
     "mysql2": "^1.5.2",
     "sequelize": "^4.37.1",
     "sequelize-cli": "^4.0.0",
-    "resource-router-middleware": "^0.6.0"
+    "resource-router-middleware": "^0.6.0",
+    "winston": "^2.4.1"
   },
   "devDependencies": {
     "bluebird": "^3.5.1",
@@ -60,8 +61,7 @@
     "nodemon": "^1.9.2",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
-    "passport-local": "^1.0.0",
-    "winston": "^2.4.1"
+    "passport-local": "^1.0.0"
   },
   "babel": {
     "presets": [
