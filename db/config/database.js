@@ -1,4 +1,4 @@
-const db = require('../../src/config').db
+const config = require('../../src/config');
 
 module.exports = {
   development: {
@@ -16,10 +16,10 @@ module.exports = {
     dialect: 'mysql'
   },
   production: {
-    username: db.user,
-    password: db.password,
-    database: db.database,
-    host: db.host,
+    username: config.db.user,
+    password: config.db.password,
+    database: config.db.database,
+    host: config.db.host,
     dialect: 'mysql',
   }
 };
