@@ -6,12 +6,12 @@ import authenticate from '../controllers/authenticate';
 import category from '../controllers/category';
 import { getBudget } from '../controllers/budget';
 
-export default ({config, db}) => {
+export default () => {
   let api = Router();
 
-  api.use('/spending', spending({config, db}));
+  api.use('/spending', spending());
 
-  api.use('/profit', profit({config, db}));
+  api.use('/profit', profit());
   api.use('/spending/user/:userId', getSpendingByUser);
 
   api.use('/profit/user/:userId', getProfitsByUser);

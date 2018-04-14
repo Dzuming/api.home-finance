@@ -1,8 +1,8 @@
 import Sequelize from 'sequelize';
-import setting from './env';
+import db from './config';
 
-const sequelize = new Sequelize(setting.database, setting.user, setting.password, {
-  host: setting.host,
+const sequelize = new Sequelize(db.database, db.user, db.password, {
+  host: db.host,
   dialect: 'mysql',
   operatorsAliases: false,
   pool: {

@@ -2,7 +2,7 @@ import resource from 'resource-router-middleware';
 import { deleteSpending, editSpending, getSpendings, getSpendingById, postSpending } from '../models/spending';
 import logger from '../lib/logger';
 
-export default ({config, db}) => resource({
+export default () => resource({
     id: 'spendingId',
 
     load (req, id, callback) {

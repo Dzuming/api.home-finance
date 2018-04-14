@@ -5,9 +5,8 @@ import morgan from 'morgan';
 import bodyParser from 'body-parser';
 import middleware from './middleware';
 import api from './routes';
-import config from './config.json';
-import logger from './lib/logger'
-
+import config from './config';
+import logger from './lib/logger';
 require('./lib/passport');
 let app = express();
 app.server = http.createServer(app);
@@ -29,9 +28,9 @@ app.use(cors({
 }));
 
 app.use(bodyParser.json({limit: config.bodyLimit}));
-app.use(middleware({config}));
+app.use(middleware());
 
-app.use('/api', api({config}));
+app.use('/api', api());
 
 app.server.listen(process.env.PORT || config.port, () => {
   console.log(`Started on port ${app.server.address().port}`);

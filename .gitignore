@@ -2,5 +2,5 @@
 /logs
 /npm-debug.log
 /node_modules
-/src/env/prod.env.js
+.env
 .DS_Store

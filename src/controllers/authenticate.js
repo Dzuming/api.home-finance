@@ -1,6 +1,6 @@
 import passport from 'passport';
 import jwt from 'jsonwebtoken';
-import setting from '../env';
+import setting from '../config';
 import logger from '../lib/logger';
 
 const authenticate = {

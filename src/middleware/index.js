@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import expressJwt from 'express-jwt';
-import setting from '../env';
+import setting from '../config';
 
 const checkIfRouterAuth = () => {
   const pubicEndpoints = ['/api/authenticate'];
