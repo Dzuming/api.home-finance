@@ -1,6 +1,7 @@
 import { getProfitById, getProfits, postProfit, deleteProfit, editProfit } from '../models/profit';
 import logger from '../lib/logger';
 import resource from 'resource-router-middleware';
+import { validateFinanceFlow } from '../lib/validate';
 
 export default () => resource({
   id: 'profitId',
@@ -18,6 +19,10 @@ export default () => resource({
   /** POST / - Create a new entity */
   create (data, res) {
     const profit = data.body;
+    const validate = validateFinanceFlow(profit);
+    if (validate.error) {
+      res.status(400).end(validate.error.toString());
+    }
     postProfit(profit)
       .then(response => getProfitById(response.id)
         .then(resProfit =>

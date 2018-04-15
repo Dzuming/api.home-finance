@@ -1,6 +1,7 @@
 import resource from 'resource-router-middleware';
 import { deleteSpending, editSpending, getSpendings, getSpendingById, postSpending } from '../models/spending';
 import logger from '../lib/logger';
+import { validateFinanceFlow } from '../lib/validate';
 
 export default () => resource({
     id: 'spendingId',
@@ -18,6 +19,10 @@ export default () => resource({
     /** POST / - Create a new entity */
     create (data, res) {
       const spending = data.body;
+      const validate = validateFinanceFlow(spending)
+      if (validate.error) {
+        res.status(400).end(validate.error.toString());
+      }
       postSpending(spending)
         .then(response => getSpendingById(response.id)
           .then(resSpending =>
