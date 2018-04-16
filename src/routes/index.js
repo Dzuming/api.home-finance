@@ -5,6 +5,7 @@ import user from '../controllers/user';
 import authenticate from '../controllers/authenticate';
 import category from '../controllers/category';
 import { getBudget } from '../controllers/budget';
+import { getRevenue } from '../controllers/revenue';
 
 export default () => {
   let api = Router();
@@ -23,6 +24,8 @@ export default () => {
   api.post('/authenticate', authenticate.token);
 
   api.get('/budget/:userId', getBudget);
+
+  api.get('/revenue/:userId/:period', getRevenue);
 
   return api;
 };
