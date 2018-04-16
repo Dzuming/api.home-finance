@@ -8,17 +8,17 @@ let should = chai.should();
 
 chai.use(chaiHttp);
 describe('category', () => {
-  beforeEach(function () {
-    return models.sequelize.drop()
-      .then(() => models.sequelize.sync());
+  beforeEach(function() {
+    return models.sequelize.drop().then(() => models.sequelize.sync());
   });
-  it('it should GET categories', (done) => {
+  it('it should GET categories', done => {
     const category = {
       id: 1,
       name: 'Jedzenie',
     };
     models.Category.create(category).then(() => {
-      chai.request(server)
+      chai
+        .request(server)
         .get('/api/categories')
         .end((err, res) => {
           res.should.have.status(200);

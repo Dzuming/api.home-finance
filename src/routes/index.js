@@ -25,4 +25,4 @@ export default () => {
   api.get('/budget/:userId', getBudget);
 
   return api;
-}
+};

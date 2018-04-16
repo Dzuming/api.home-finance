@@ -1,58 +1,64 @@
 import resource from 'resource-router-middleware';
-import { deleteSpending, editSpending, getSpendings, getSpendingById, postSpending } from '../models/spending';
+import {
+  deleteSpending,
+  editSpending,
+  getSpendings,
+  getSpendingById,
+  postSpending,
+} from '../models/spending';
 import logger from '../lib/logger';
 import { validateFinanceFlow } from '../lib/validate';
 
-export default () => resource({
+export default () =>
+  resource({
     id: 'spendingId',
 
-    load (req, id, callback) {
+    load(req, id, callback) {
       const spendingId = id,
         err = spendingId ? null : 'Not found';
       callback(err, spendingId);
     },
     /** GET / - List all entities */
-    index ({params}, res) {
-
-    },
+    index({ params }, res) {},
 
     /** POST / - Create a new entity */
-    create (data, res) {
+    create(data, res) {
       const spending = data.body;
-      const validate = validateFinanceFlow(spending)
+      const validate = validateFinanceFlow(spending);
       if (validate.error) {
         res.status(400).end(validate.error.toString());
       }
       postSpending(spending)
-        .then(response => getSpendingById(response.id)
-          .then(resSpending =>
-            res.json({
-              spending: resSpending,
-              message: `Dodano wydatek o id ${response.id}`
-            }))
-          .catch(error => logger.error(error)))
+        .then(response =>
+          getSpendingById(response.id)
+            .then(resSpending =>
+              res.json({
+                spending: resSpending,
+                message: `Dodano wydatek o id ${response.id}`,
+              }),
+            )
+            .catch(error => logger.error(error)),
+        )
         .catch(error => logger.error(error));
     },
 
     /** GET /:id - Return a given entity */
-    read ({spendingId}, res) {
-    },
+    read({ spendingId }, res) {},
 
     /** PUT /:id - Update a given entity */
-    update ({spendingId, body}, res) {
+    update({ spendingId, body }, res) {
       editSpending(spendingId, body)
         .then(() => res.json(`wyedytowano wydatek o id ${spendingId}`))
         .catch(error => logger.error(error));
     },
 
     /** DELETE /:id - Delete a given entity */
-    delete ({spendingId}, res) {
+    delete({ spendingId }, res) {
       deleteSpending(spendingId)
-        .then(() => res.json({id: spendingId}))
+        .then(() => res.json({ id: spendingId }))
         .catch(error => logger.error(error));
-    }
-  }
-);
+    },
+  });
 export const getSpendingByUser = (req, res) => {
   getSpendings(req.params)
     .then(result => res.json(result))

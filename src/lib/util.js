@@ -9,7 +9,7 @@ import db from '../db';
  *			collection.find({}, toRes(res));
  *		}
  */
-export function toRes (res, status = 200) {
+export function toRes(res, status = 200) {
   return (err, thing) => {
     if (err) return res.status(500).send(err);
 
@@ -20,10 +20,10 @@ export function toRes (res, status = 200) {
   };
 }
 
-export function dbQueryPromise (query) {
+export function dbQueryPromise(query) {
   return new Promise((resolve, reject) => {
     db().getConnection((err, connection) => {
-      connection.query(query, function (error, results, fields) {
+      connection.query(query, function(error, results, fields) {
         resolve(results);
         if (error) throw error;
       });

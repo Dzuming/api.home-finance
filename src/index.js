@@ -13,21 +13,27 @@ app.server = http.createServer(app);
 
 // logger
 const loggerstream = {
-  write: function (message, encoding) {
+  write: function(message, encoding) {
     logger.info(message);
-  }
+  },
 };
-app.use(morgan('common', {
-  stream: loggerstream,
-  skip: function (req, res) { return res.statusCode < 400; }
-}));
+app.use(
+  morgan('common', {
+    stream: loggerstream,
+    skip: function(req, res) {
+      return res.statusCode < 400;
+    },
+  }),
+);
 
 // 3rd party middleware
-app.use(cors({
-  exposedHeaders: config.corsHeaders
-}));
+app.use(
+  cors({
+    exposedHeaders: config.corsHeaders,
+  }),
+);
 
-app.use(bodyParser.json({limit: config.bodyLimit}));
+app.use(bodyParser.json({ limit: config.bodyLimit }));
 app.use(middleware());
 
 app.use('/api', api());

@@ -13,10 +13,10 @@ const logger = () => {
       new winston.transports.File({
         file: 'error',
         filename: `${dir}/error.log`,
-        level: 'error'
-      })
+        level: 'error',
+      }),
     ],
-    exitOnError: false
+    exitOnError: false,
   });
 };
 

@@ -4,7 +4,9 @@ import setting from '../config';
 
 const checkIfRouterAuth = () => {
   const pubicEndpoints = ['/api/authenticate'];
-  return expressJwt({secret: setting.secret}).unless({path: pubicEndpoints});
+  return expressJwt({ secret: setting.secret }).unless({
+    path: pubicEndpoints,
+  });
 };
 
 export default () => {
@@ -13,4 +15,4 @@ export default () => {
     routes.use(checkIfRouterAuth());
   }
   return routes;
-}
+};
