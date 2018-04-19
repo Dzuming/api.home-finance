@@ -8,16 +8,16 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      user_id: {
+      userId: {
         type: Sequelize.INTEGER,
       },
-      assumption_type_id: {
+      assumptionTypeId: {
         type: Sequelize.INTEGER,
       },
       percentage: {
         type: Sequelize.INTEGER,
       },
-      is_initial_value: {
+      isInitialValue: {
         type: Sequelize.BOOLEAN,
       },
       period: {

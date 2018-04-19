@@ -6,6 +6,7 @@ import authenticate from '../controllers/authenticate';
 import category from '../controllers/category';
 import { getBudget } from '../controllers/budget';
 import { getRevenue } from '../controllers/revenue';
+import { getAssumptions } from '../controllers/assumption';
 
 export default () => {
   let api = Router();
@@ -26,6 +27,8 @@ export default () => {
   api.get('/budget/:userId', getBudget);
 
   api.get('/revenue/:userId/:period', getRevenue);
+
+  api.get('/assumptions/:userId/:period', getAssumptions);
 
   return api;
 };
