@@ -30,3 +30,7 @@ export function dbQueryPromise(query) {
     });
   });
 }
+
+export const deleteParamFromObject = (object, param) => {
+  object.map(mappedAssumption => delete mappedAssumption[param]);
+};

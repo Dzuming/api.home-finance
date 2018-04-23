@@ -1,21 +1,21 @@
 import model from '../../db/models';
 import bluebird from 'bluebird';
+import logger from '../lib/logger';
+import { deleteParamFromObject } from '../lib/util';
 
 export const getAssumptionsFromPeriod = ({ userId, period }) =>
   new Promise(resolve =>
-    assumptionCalculation({ userId, period }).then(
-      ({ assumptions, profitSum }) => {
-        assumptionMap(assumptions, profitSum, userId, period).then(
-          mappedAssumptions => {
-            mapValueForCategoryAssumptions(
-              mappedAssumptions,
-              userId,
-              period,
-            ).then(assumptions => resolve(assumptions));
-          },
-        );
-      },
-    ),
+    assumptionCalculation({ userId, period })
+      .then(({ assumptions, profitSum }) => {
+        assumptionMap(assumptions, profitSum, userId, period)
+          .then(mappedAssumptions => {
+            mapValueForCategoryAssumptions(mappedAssumptions, userId, period)
+              .then(assumptions => resolve(assumptions))
+              .catch(error => logger.error(error));
+          })
+          .catch(error => logger.error(error));
+      })
+      .catch(error => logger.error(error)),
   );
 
 const assumptionCalculation = ({ userId, period }) => {
@@ -26,8 +26,8 @@ const assumptionCalculation = ({ userId, period }) => {
 
 const assumptionMap = (assumptions, profitSum, userId, period) => {
   return bluebird.map(assumptions, assumption => {
-    return getAssumptionCategoryFromDb(assumption.id).then(
-      categoryAssumptions => {
+    return getAssumptionCategoryFromDb(assumption.id)
+      .then(categoryAssumptions => {
         return {
           id: assumption.id,
           name: assumption.AssumptionType.name,
@@ -35,24 +35,27 @@ const assumptionMap = (assumptions, profitSum, userId, period) => {
           value: profitSum * assumption.percentage * 0.01,
           categoryAssumptions: categoryAssumptions,
         };
-      },
-    );
+      })
+      .catch(error => logger.error(error));
   });
 };
 
 const mapValueForCategoryAssumptions = (mappedAssumptions, userId, period) => {
   return new Promise(resolve =>
-    bluebird.map(mappedAssumptions, mappedAssumption => {
-      if (mappedAssumption.categoryAssumptions.length > 0) {
-        sumCategorySpending(mappedAssumption, userId, period).then(result => {
-          console.log('result');
+    bluebird.map(mappedAssumptions, (mappedAssumption, index) => {
+      sumCategorySpending(mappedAssumption, userId, period).then(result => {
+        const isArrayGreterThanZero =
+          Array.isArray(mappedAssumption.categoryAssumptions) &&
+          mappedAssumption.categoryAssumptions.length > 0;
+        if (isArrayGreterThanZero) {
           mappedAssumption.value = result;
-          mappedAssumptions.map(
-            mappedAssumption => delete mappedAssumption.categoryAssumptions,
-          );
+        }
+        const isLastMappedElement = index === mappedAssumptions.length - 1;
+        if (isLastMappedElement) {
+          deleteParamFromObject(mappedAssumptions, 'categoryAssumptions');
           resolve(mappedAssumptions);
-        });
-      }
+        }
+      });
     }),
   );
 };
@@ -66,13 +69,16 @@ const sumCategorySpending = (mappedAssumption, userId, period) =>
           categoryAssumption.categoryId,
           userId,
           period,
-        ).then(value => {
-          return total + parseInt(value, 10);
-        });
+        )
+          .then(value => {
+            return total + parseInt(value, 10);
+          })
+          .catch(error => logger.error(error));
       },
       0,
     )
-    .then(spendingCategorySum => spendingCategorySum);
+    .then(spendingCategorySum => spendingCategorySum)
+    .catch(error => logger.error(error));
 
 const getAssumptionsFromDb = ({ userId, period }) =>
   model.Assumption.findAll({

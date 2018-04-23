@@ -155,4 +155,111 @@ describe('assumption', () => {
         });
     });
   });
+
+  it('it should get all assumptions from specific month with values if no assuptionsCategory', done => {
+    const assumption = [
+      {
+        id: 1,
+        userId: 1,
+        assumptionTypeId: 1,
+        percentage: 20,
+        isInitialValue: true,
+        period: '2018-04',
+      },
+      {
+        id: 2,
+        userId: 1,
+        assumptionTypeId: 2,
+        percentage: 10,
+        isInitialValue: true,
+        period: '2018-04',
+      },
+      {
+        id: 3,
+        userId: 1,
+        assumptionTypeId: 2,
+        percentage: 50,
+        isInitialValue: false,
+        period: '2018-04',
+      },
+    ];
+    const profit = {
+      id: 1,
+      value: 333,
+      description: 'test',
+      userId: 1,
+      categoryId: 1,
+      period: '2018-04',
+    };
+    const spending = [
+      {
+        id: 1,
+        value: 120,
+        description: 'test',
+        userId: 1,
+        categoryId: 1,
+        period: '2018-04',
+      },
+      {
+        id: 2,
+        value: 234,
+        description: 'test',
+        userId: 1,
+        categoryId: 2,
+        period: '2018-04',
+      },
+      {
+        id: 3,
+        value: 3332,
+        description: 'test',
+        userId: 2,
+        categoryId: 1,
+        period: '2018-04',
+      },
+      {
+        id: 4,
+        value: 341,
+        description: 'test',
+        userId: 1,
+        categoryId: 1,
+        period: '2018-04',
+      },
+    ];
+    const initialData = bluebird.all([
+      models.Assumption.bulkCreate(assumption),
+      models.Profit.create(profit),
+      models.Spending.bulkCreate(spending),
+    ]);
+
+    initialData.then(() => {
+      chai
+        .request(server)
+        .get('/api/assumptions/1/2018-04')
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a('array');
+          res.body.should.eql([
+            {
+              id: 1,
+              name: 'Poduszka bezpieczeństwa',
+              percentage: 20,
+              value: 66.6,
+            },
+            {
+              id: 2,
+              name: 'Wakacje',
+              percentage: 10,
+              value: 33.3,
+            },
+            {
+              id: 3,
+              name: 'Wakacje',
+              percentage: 50,
+              value: 166.5,
+            },
+          ]);
+          done();
+        });
+    });
+  });
 });
