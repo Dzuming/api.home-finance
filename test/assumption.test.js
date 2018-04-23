@@ -59,7 +59,7 @@ describe('assumption', () => {
       {
         id: 3,
         userId: 1,
-        assumptionTypeId: 2,
+        assumptionTypeId: 3,
         percentage: 50,
         isInitialValue: false,
         period: '2018-04',
@@ -107,20 +107,20 @@ describe('assumption', () => {
         period: '2018-04',
       },
     ];
-    const assumptionCategory = [
+    const assumptionTypeCategory = [
       {
-        assumptionId: 3,
+        assumptionTypeId: 3,
         categoryId: 1,
       },
       {
-        assumptionId: 3,
+        assumptionTypeId: 3,
         categoryId: 2,
       },
     ];
     const initialData = bluebird.all([
       models.Assumption.bulkCreate(assumption),
       models.Profit.create(profit),
-      models.AssumptionCategory.bulkCreate(assumptionCategory),
+      models.AssumptionTypeCategory.bulkCreate(assumptionTypeCategory),
       models.Spending.bulkCreate(spending),
     ]);
 
@@ -146,7 +146,7 @@ describe('assumption', () => {
             },
             {
               id: 3,
-              name: 'Wakacje',
+              name: 'Rachunki',
               percentage: 50,
               value: 695,
             },
@@ -177,7 +177,7 @@ describe('assumption', () => {
       {
         id: 3,
         userId: 1,
-        assumptionTypeId: 2,
+        assumptionTypeId: 3,
         percentage: 50,
         isInitialValue: false,
         period: '2018-04',
@@ -253,7 +253,7 @@ describe('assumption', () => {
             },
             {
               id: 3,
-              name: 'Wakacje',
+              name: 'Rachunki',
               percentage: 50,
               value: 166.5,
             },

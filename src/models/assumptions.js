@@ -26,14 +26,14 @@ const assumptionCalculation = ({ userId, period }) => {
 
 const assumptionMap = (assumptions, profitSum, userId, period) => {
   return bluebird.map(assumptions, assumption => {
-    return getAssumptionCategoryFromDb(assumption.id)
-      .then(categoryAssumptions => {
+    return getAssumptionCategoryFromDb(assumption.AssumptionType.id)
+      .then(categoryTypeAssumptions => {
         return {
           id: assumption.id,
           name: assumption.AssumptionType.name,
           percentage: assumption.percentage,
           value: profitSum * assumption.percentage * 0.01,
-          categoryAssumptions: categoryAssumptions,
+          categoryTypeAssumptions,
         };
       })
       .catch(error => logger.error(error));
@@ -41,18 +41,20 @@ const assumptionMap = (assumptions, profitSum, userId, period) => {
 };
 
 const mapValueForCategoryAssumptions = (mappedAssumptions, userId, period) => {
+  let index = 0;
   return new Promise(resolve =>
-    bluebird.map(mappedAssumptions, (mappedAssumption, index) => {
+    bluebird.map(mappedAssumptions, mappedAssumption => {
       sumCategorySpending(mappedAssumption, userId, period).then(result => {
-        const isArrayGreterThanZero =
-          Array.isArray(mappedAssumption.categoryAssumptions) &&
-          mappedAssumption.categoryAssumptions.length > 0;
-        if (isArrayGreterThanZero) {
+        const isArrayGreaterThanZero =
+          Array.isArray(mappedAssumption.categoryTypeAssumptions) &&
+          mappedAssumption.categoryTypeAssumptions.length > 0;
+        if (isArrayGreaterThanZero) {
           mappedAssumption.value = result;
         }
-        const isLastMappedElement = index === mappedAssumptions.length - 1;
+        index++;
+        const isLastMappedElement = index === mappedAssumptions.length;
         if (isLastMappedElement) {
-          deleteParamFromObject(mappedAssumptions, 'categoryAssumptions');
+          deleteParamFromObject(mappedAssumptions, 'categoryTypeAssumptions');
           resolve(mappedAssumptions);
         }
       });
@@ -63,7 +65,7 @@ const mapValueForCategoryAssumptions = (mappedAssumptions, userId, period) => {
 const sumCategorySpending = (mappedAssumption, userId, period) =>
   bluebird
     .reduce(
-      mappedAssumption.categoryAssumptions,
+      mappedAssumption.categoryTypeAssumptions,
       (total, categoryAssumption) => {
         return getSpendingByCategoryFromDb(
           categoryAssumption.categoryId,
@@ -87,15 +89,15 @@ const getAssumptionsFromDb = ({ userId, period }) =>
     include: [
       {
         model: model.AssumptionType,
-        attributes: ['name'],
+        attributes: ['id', 'name'],
       },
     ],
   });
 
-const getAssumptionCategoryFromDb = assumptionId =>
-  model.AssumptionCategory.findAll({
-    where: { assumptionId },
-    attributes: ['assumptionId', 'categoryId'],
+const getAssumptionCategoryFromDb = assumptionTypeId =>
+  model.AssumptionTypeCategory.findAll({
+    where: { assumptionTypeId },
+    attributes: ['assumptionTypeId', 'categoryId'],
   });
 
 const getSpendingByCategoryFromDb = (categoryId, userId, period) =>

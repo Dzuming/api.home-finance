@@ -1,14 +1,14 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('AssumptionCategories', {
+    return queryInterface.createTable('AssumptionTypeCategories', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      assumptionId: {
+      assumptionTypeId: {
         type: Sequelize.INTEGER,
       },
       categoryId: {
@@ -25,6 +25,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('AssumptionCategories');
+    return queryInterface.dropTable('AssumptionTypeCategories');
   },
 };

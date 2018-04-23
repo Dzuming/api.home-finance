@@ -963,10 +963,10 @@
       <Charset>utf8mb4</Charset>
       <DefaultForCharset>0</DefaultForCharset>
     </collation>
-    <table id="243" parent="4" name="assumptioncategories">
+    <table id="243" parent="4" name="assumptions">
       <Engine>InnoDB</Engine>
     </table>
-    <table id="244" parent="4" name="assumptions">
+    <table id="244" parent="4" name="assumptiontypecategories">
       <Engine>InnoDB</Engine>
     </table>
     <table id="245" parent="4" name="assumptiontypes">
@@ -995,73 +995,73 @@
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="252" parent="243" name="assumptionId">
+    <column id="252" parent="243" name="userId">
       <Position>2</Position>
       <DataType>int(11)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="253" parent="243" name="categoryId">
+    <column id="253" parent="243" name="assumptionTypeId">
       <Position>3</Position>
       <DataType>int(11)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="254" parent="243" name="createdAt">
+    <column id="254" parent="243" name="percentage">
       <Position>4</Position>
-      <DataType>datetime|0s</DataType>
-      <NotNull>1</NotNull>
+      <DataType>int(11)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="255" parent="243" name="updatedAt">
+    <column id="255" parent="243" name="isInitialValue">
       <Position>5</Position>
+      <DataType>tinyint(1)|0s</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="256" parent="243" name="period">
+      <Position>6</Position>
+      <DataType>varchar(255)|0s</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="257" parent="243" name="createdAt">
+      <Position>7</Position>
       <DataType>datetime|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <key id="256" parent="243" name="PRIMARY">
+    <column id="258" parent="243" name="updatedAt">
+      <Position>8</Position>
+      <DataType>datetime|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <key id="259" parent="243" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="257" parent="244" name="id">
+    <column id="260" parent="244" name="id">
       <Position>1</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="258" parent="244" name="userId">
+    <column id="261" parent="244" name="assumptionTypeId">
       <Position>2</Position>
       <DataType>int(11)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="259" parent="244" name="assumptionTypeId">
+    <column id="262" parent="244" name="categoryId">
       <Position>3</Position>
       <DataType>int(11)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="260" parent="244" name="percentage">
-      <Position>4</Position>
-      <DataType>int(11)|0s</DataType>
-      <ColumnKind>normal</ColumnKind>
-    </column>
-    <column id="261" parent="244" name="isInitialValue">
-      <Position>5</Position>
-      <DataType>tinyint(1)|0s</DataType>
-      <ColumnKind>normal</ColumnKind>
-    </column>
-    <column id="262" parent="244" name="period">
-      <Position>6</Position>
-      <DataType>varchar(255)|0s</DataType>
-      <ColumnKind>normal</ColumnKind>
-    </column>
     <column id="263" parent="244" name="createdAt">
-      <Position>7</Position>
+      <Position>4</Position>
       <DataType>datetime|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
     <column id="264" parent="244" name="updatedAt">
-      <Position>8</Position>
+      <Position>5</Position>
       <DataType>datetime|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
