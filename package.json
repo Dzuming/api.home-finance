@@ -9,7 +9,7 @@
     "start": "node dist",
     "prestart": "npm run -s build",
     "lint": "eslint src",
-    "test": "cross-env NODE_ENV=test SEQUELIZE_DB_CONFIG=db/config/database.json mocha --require babel-register --exit",
+    "test": "cross-env NODE_ENV=test SEQUELIZE_DB_CONFIG=db/config/database.js mocha --require babel-register --exit",
     "create-db-test": "cross-env NODE_ENV=test node_modules/.bin/sequelize db:create finance-home-test"
   },
   "eslintConfig": {
