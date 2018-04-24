@@ -42,5 +42,13 @@ jobs:
       # run tests!
       - run: yarn create-db-test
       - run: yarn test
+        environment:
+          MYSQL_USER=root
+          MYSQL_ALLOW_EMPTY_PASSWORD=yes
+          DB_HOST=localhost
+          DB_USER=root
+          DB_PASSWORD=
+          DB_DATABASE=finance-home-test
+          SECRET=hgiuwrepu432we
 
 
