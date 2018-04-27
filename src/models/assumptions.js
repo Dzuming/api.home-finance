@@ -33,6 +33,7 @@ const assumptionMap = (assumptions, profitSum, userId, period) => {
           name: assumption.AssumptionType.name,
           percentage: assumption.percentage,
           value: profitSum * assumption.percentage * 0.01,
+          limit: profitSum * assumption.percentage * 0.01,
           categoryTypeAssumptions,
         };
       })

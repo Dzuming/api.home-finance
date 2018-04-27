@@ -137,18 +137,21 @@ describe('assumption', () => {
               name: 'Poduszka bezpieczeństwa',
               percentage: 20,
               value: 66.6,
+              limit: 66.6,
             },
             {
               id: 2,
               name: 'Wakacje',
               percentage: 10,
               value: 33.3,
+              limit: 33.3,
             },
             {
               id: 3,
               name: 'Rachunki',
               percentage: 50,
               value: 695,
+              limit: 166.5,
             },
           ]);
           done();
@@ -244,18 +247,21 @@ describe('assumption', () => {
               name: 'Poduszka bezpieczeństwa',
               percentage: 20,
               value: 66.6,
+              limit: 66.6,
             },
             {
               id: 2,
               name: 'Wakacje',
               percentage: 10,
               value: 33.3,
+              limit: 33.3,
             },
             {
               id: 3,
               name: 'Rachunki',
               percentage: 50,
               value: 166.5,
+              limit: 166.5,
             },
           ]);
           done();
