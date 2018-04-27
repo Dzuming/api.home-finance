@@ -51,7 +51,7 @@ describe('spending', () => {
           res.body[0].should.eql(
             {
               id: 1,
-              value: 333,
+              value: '333.00',
               description: 'test',
               category: { id: 1, name: 'jedzenie' },
               period: '2018-03',
@@ -72,7 +72,7 @@ describe('spending', () => {
   it('it should POST spending', done => {
     const spending = {
       id: 1,
-      value: 1,
+      value: '1',
       categoryId: 1,
       period: '2018-04',
       userId: 1,
@@ -88,7 +88,7 @@ describe('spending', () => {
         res.body.should.be.a('object');
         res.body.spending.should.be.eql({
           id: 1,
-          value: 1,
+          value: '1.00',
           period: '2018-04',
           description: 'test',
           category: {

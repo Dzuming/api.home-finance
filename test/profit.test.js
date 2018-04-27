@@ -50,7 +50,7 @@ describe('profits', () => {
           res.body[0].should.eql(
             {
               id: 1,
-              value: 333,
+              value: '333.00',
               description: 'test',
               category: { id: 1, name: 'jedzenie' },
               period: '2018-03',
@@ -87,7 +87,7 @@ describe('profits', () => {
         res.body.should.be.a('object');
         res.body.profit.should.be.eql({
           id: 1,
-          value: 1,
+          value: '1.00',
           period: '2018-04',
           description: 'test',
           category: {
