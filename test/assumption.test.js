@@ -268,4 +268,20 @@ describe('assumption', () => {
         });
     });
   });
+
+  it('it should return empty array if no assumptions in database', done => {
+    const initialData = bluebird.all([]);
+
+    initialData.then(() => {
+      chai
+        .request(server)
+        .get('/api/assumptions/1/2018-04')
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a('array');
+          res.body.should.eql([]);
+          done();
+        });
+    });
+  });
 });
