@@ -137,18 +137,21 @@ describe('assumption', () => {
               name: 'Poduszka bezpieczeństwa',
               percentage: 20,
               value: 66.6,
+              limit: 66.6,
             },
             {
               id: 2,
               name: 'Wakacje',
               percentage: 10,
               value: 33.3,
+              limit: 33.3,
             },
             {
               id: 3,
               name: 'Rachunki',
               percentage: 50,
               value: 695,
+              limit: 166.5,
             },
           ]);
           done();
@@ -244,20 +247,39 @@ describe('assumption', () => {
               name: 'Poduszka bezpieczeństwa',
               percentage: 20,
               value: 66.6,
+              limit: 66.6,
             },
             {
               id: 2,
               name: 'Wakacje',
               percentage: 10,
               value: 33.3,
+              limit: 33.3,
             },
             {
               id: 3,
               name: 'Rachunki',
               percentage: 50,
               value: 166.5,
+              limit: 166.5,
             },
           ]);
+          done();
+        });
+    });
+  });
+
+  it('it should return empty array if no assumptions in database', done => {
+    const initialData = bluebird.all([]);
+
+    initialData.then(() => {
+      chai
+        .request(server)
+        .get('/api/assumptions/1/2018-04')
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a('array');
+          res.body.should.eql([]);
           done();
         });
     });

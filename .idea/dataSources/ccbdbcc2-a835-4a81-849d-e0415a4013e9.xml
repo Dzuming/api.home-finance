@@ -1145,7 +1145,7 @@
     </column>
     <column id="278" parent="247" name="value">
       <Position>3</Position>
-      <DataType>int(11)|0s</DataType>
+      <DataType>float(10,2 digit)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
@@ -1228,7 +1228,7 @@
     </column>
     <column id="293" parent="249" name="value">
       <Position>3</Position>
-      <DataType>int(11)|0s</DataType>
+      <DataType>float(10,2 digit)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>

@@ -24,7 +24,7 @@ const assumptionCalculation = ({ userId, period }) => {
   return bluebird.props({ assumptions, profitSum });
 };
 
-const assumptionMap = (assumptions, profitSum, userId, period) => {
+const assumptionMap = (assumptions, profitSum) => {
   return bluebird.map(assumptions, assumption => {
     return getAssumptionCategoryFromDb(assumption.AssumptionType.id)
       .then(categoryTypeAssumptions => {
@@ -33,6 +33,7 @@ const assumptionMap = (assumptions, profitSum, userId, period) => {
           name: assumption.AssumptionType.name,
           percentage: assumption.percentage,
           value: profitSum * assumption.percentage * 0.01,
+          limit: profitSum * assumption.percentage * 0.01,
           categoryTypeAssumptions,
         };
       })
@@ -42,8 +43,11 @@ const assumptionMap = (assumptions, profitSum, userId, period) => {
 
 const mapValueForCategoryAssumptions = (mappedAssumptions, userId, period) => {
   let index = 0;
-  return new Promise(resolve =>
-    bluebird.map(mappedAssumptions, mappedAssumption => {
+  return new Promise(resolve => {
+    if (mappedAssumptions.length === 0) {
+      resolve([]);
+    }
+    return bluebird.map(mappedAssumptions, mappedAssumption => {
       sumCategorySpending(mappedAssumption, userId, period).then(result => {
         const isArrayGreaterThanZero =
           Array.isArray(mappedAssumption.categoryTypeAssumptions) &&
@@ -58,12 +62,12 @@ const mapValueForCategoryAssumptions = (mappedAssumptions, userId, period) => {
           resolve(mappedAssumptions);
         }
       });
-    }),
-  );
+    });
+  });
 };
 
-const sumCategorySpending = (mappedAssumption, userId, period) =>
-  bluebird
+const sumCategorySpending = (mappedAssumption, userId, period) => {
+  return bluebird
     .reduce(
       mappedAssumption.categoryTypeAssumptions,
       (total, categoryAssumption) => {
@@ -81,6 +85,7 @@ const sumCategorySpending = (mappedAssumption, userId, period) =>
     )
     .then(spendingCategorySum => spendingCategorySum)
     .catch(error => logger.error(error));
+};
 
 const getAssumptionsFromDb = ({ userId, period }) =>
   model.Assumption.findAll({

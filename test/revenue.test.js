@@ -40,14 +40,14 @@ describe('revenue', () => {
     ];
     const spending = [
       {
-        value: 100,
+        value: 100.22,
         description: 'test',
         userId: 2,
         categoryId: 1,
         period: '2018-03',
       },
       {
-        value: 100,
+        value: 100.77,
         description: 'test1',
         userId: 1,
         categoryId: 1,
@@ -72,7 +72,7 @@ describe('revenue', () => {
         .get('/api/revenue/1/2018-04')
         .end((err, res) => {
           res.should.have.status(200);
-          res.body.should.eql({ revenue: 200 });
+          res.body.should.eql({ revenue: '199.23' });
           done();
         });
     });
