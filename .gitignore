@@ -2,5 +2,7 @@
 /logs
 /npm-debug.log
 /node_modules
+.vagrant
+*-console.log
 .env
 .DS_Store
