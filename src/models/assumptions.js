@@ -32,8 +32,8 @@ const assumptionMap = (assumptions, profitSum) => {
           id: assumption.id,
           name: assumption.AssumptionType.name,
           percentage: assumption.percentage,
-          value: profitSum * assumption.percentage * 0.01,
-          limit: profitSum * assumption.percentage * 0.01,
+          value: (profitSum * assumption.percentage * 0.01).toFixed(2),
+          limit: (profitSum * assumption.percentage * 0.01).toFixed(2),
           categoryTypeAssumptions,
         };
       })
@@ -53,7 +53,7 @@ const mapValueForCategoryAssumptions = (mappedAssumptions, userId, period) => {
           Array.isArray(mappedAssumption.categoryTypeAssumptions) &&
           mappedAssumption.categoryTypeAssumptions.length > 0;
         if (isArrayGreaterThanZero) {
-          mappedAssumption.value = result;
+          mappedAssumption.value = result.toFixed(2);
         }
         index++;
         const isLastMappedElement = index === mappedAssumptions.length;
