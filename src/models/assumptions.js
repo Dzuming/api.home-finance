@@ -28,12 +28,13 @@ const assumptionMap = (assumptions, profitSum) => {
   return bluebird.map(assumptions, assumption => {
     return getAssumptionCategoryFromDb(assumption.AssumptionType.id)
       .then(categoryTypeAssumptions => {
+        const value = profitSum * assumption.percentage * 0.01;
         return {
           id: assumption.id,
           name: assumption.AssumptionType.name,
           percentage: assumption.percentage,
-          value: (profitSum * assumption.percentage * 0.01).toFixed(2),
-          limit: (profitSum * assumption.percentage * 0.01).toFixed(2),
+          value: !isNaN(value) ? value.toFixed(2) : 0,
+          limit: !isNaN(value) ? value.toFixed(2) : 0,
           categoryTypeAssumptions,
         };
       })
