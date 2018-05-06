@@ -72,7 +72,7 @@ describe('budget', () => {
         .get('/api/budget/1')
         .end((err, res) => {
           res.should.have.status(200);
-          res.body.should.be.eql({ budget: 400 });
+          res.body.should.be.eql({ budget: '400.00' });
           done();
         });
     });
@@ -110,7 +110,7 @@ describe('budget', () => {
         .get('/api/budget/1')
         .end((err, res) => {
           res.should.have.status(200);
-          res.body.should.be.eql({ budget: -200 });
+          res.body.should.be.eql({ budget: '-200.00' });
           done();
         });
     });
@@ -148,7 +148,7 @@ describe('budget', () => {
         .get('/api/budget/1')
         .end((err, res) => {
           res.should.have.status(200);
-          res.body.should.be.eql({ budget: 200 });
+          res.body.should.be.eql({ budget: '200.00' });
           done();
         });
     });
