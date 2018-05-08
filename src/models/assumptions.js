@@ -3,6 +3,49 @@ import bluebird from 'bluebird';
 import logger from '../lib/logger';
 import { deleteParamFromObject } from '../lib/util';
 
+export const sumAssumptions = ({ userId }) =>
+  new Promise(resolve =>
+    getPeriodsFromDb().then(periods =>
+      bluebird
+        .map(periods, value => {
+          return getAssumptionsFromPeriod({
+            userId,
+            period: value.period,
+          }).then(assumption => {
+            return assumption;
+          });
+        })
+        .then(result => {
+          const flattenArray = [].concat.apply([], result);
+          resolve(sumSimilarAssumptions(flattenArray));
+        }),
+    ),
+  );
+
+const sumSimilarAssumptions = flattenArray => {
+  let sum = [];
+  return bluebird
+    .map(flattenArray, assumption => {
+      let existing = sum.filter(function(assumptionSum) {
+        return assumptionSum.name === assumption.name;
+      })[0];
+
+      if (!existing) {
+        sum.push({
+          name: assumption.name,
+          value: assumption.value,
+        });
+      } else {
+        existing.value = parseFloat(existing.value);
+        existing.value += parseFloat(assumption.value);
+        existing.value = existing.value.toFixed(2);
+      }
+    })
+    .then(() => {
+      return sum;
+    });
+};
+
 export const getAssumptionsFromPeriod = ({ userId, period }) =>
   new Promise(resolve =>
     assumptionCalculation({ userId, period })
@@ -109,4 +152,11 @@ const getAssumptionCategoryFromDb = assumptionTypeId =>
 const getSpendingByCategoryFromDb = (categoryId, userId, period) =>
   model.Spending.sum('value', {
     where: { categoryId, userId, period },
+  });
+
+const getPeriodsFromDb = () =>
+  model.Assumption.findAll({
+    raw: true,
+    attributes: ['period'],
+    group: ['period'],
   });

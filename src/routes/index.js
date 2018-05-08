@@ -6,7 +6,10 @@ import authenticate from '../controllers/authenticate';
 import category from '../controllers/category';
 import { getBudget } from '../controllers/budget';
 import { getRevenue } from '../controllers/revenue';
-import { getAssumptions } from '../controllers/assumption';
+import {
+  getAssumptions,
+  getAssumptionsByUsers,
+} from '../controllers/assumption';
 
 export default () => {
   let api = Router();
@@ -29,6 +32,8 @@ export default () => {
   api.get('/revenue/:userId/:period', getRevenue);
 
   api.get('/assumptions/:userId/:period', getAssumptions);
+
+  api.get('/assumptions/:userId', getAssumptionsByUsers);
 
   return api;
 };
