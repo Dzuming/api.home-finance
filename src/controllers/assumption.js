@@ -2,7 +2,20 @@ import logger from '../lib/logger';
 import {
   sumAssumptions,
   getAssumptionsFromPeriod,
+  saveAssumption,
 } from '../models/assumptions';
+import resource from 'resource-router-middleware';
+
+export default () =>
+  resource({
+    /** POST / - Create a new entity */
+    create(data, res) {
+      const assumption = data.body;
+      saveAssumption(assumption)
+        .then(assumption => res.json(assumption))
+        .catch(error => logger.error(error));
+    },
+  });
 
 export const getAssumptionsByUsers = (req, res) => {
   sumAssumptions(req.params)

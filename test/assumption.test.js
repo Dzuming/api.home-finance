@@ -440,4 +440,32 @@ describe('assumption', () => {
         });
     });
   });
+
+  it('it should add assumption', done => {
+    const assumption = {
+      userId: 1,
+      assumptionTypeId: 1,
+      percentage: 20,
+      isInitialValue: 0,
+      period: '2018-04',
+    };
+    chai
+      .request(server)
+      .post('/api/assumptions')
+      .set('X-API-Key', 'foobar')
+      .send(assumption)
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.should.be.a('object');
+        res.body.should.contains({
+          id: 1,
+          userId: 1,
+          assumptionTypeId: 1,
+          percentage: 20,
+          isInitialValue: false,
+          period: '2018-04',
+        });
+        done();
+      });
+  });
 });

@@ -3,6 +3,8 @@ import bluebird from 'bluebird';
 import logger from '../lib/logger';
 import { deleteParamFromObject } from '../lib/util';
 
+export const saveAssumption = assumption => model.Assumption.create(assumption);
+
 export const sumAssumptions = ({ userId }) =>
   new Promise(resolve =>
     getPeriodsFromDb().then(periods =>

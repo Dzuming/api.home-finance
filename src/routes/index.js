@@ -6,9 +6,10 @@ import authenticate from '../controllers/authenticate';
 import category from '../controllers/category';
 import { getBudget } from '../controllers/budget';
 import { getRevenue } from '../controllers/revenue';
-import {
+import assumption, {
   getAssumptions,
   getAssumptionsByUsers,
+  postAssumption,
 } from '../controllers/assumption';
 
 export default () => {
@@ -30,6 +31,8 @@ export default () => {
   api.get('/budget/:userId', getBudget);
 
   api.get('/revenue/:userId/:period', getRevenue);
+
+  api.use('/assumptions', assumption());
 
   api.get('/assumptions/:userId/:period', getAssumptions);
 
