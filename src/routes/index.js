@@ -9,6 +9,7 @@ import { getRevenue } from '../controllers/revenue';
 import assumption, {
   getAssumptions,
   getAssumptionsByUsers,
+  getAssumptionTypes,
   postAssumption,
 } from '../controllers/assumption';
 
@@ -37,6 +38,8 @@ export default () => {
   api.get('/assumptions/:userId/:period', getAssumptions);
 
   api.get('/assumptions/:userId', getAssumptionsByUsers);
+
+  api.get('/assumptionTypes/:userId/:period', getAssumptionTypes);
 
   return api;
 };

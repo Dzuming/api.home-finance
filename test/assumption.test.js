@@ -468,4 +468,56 @@ describe('assumption', () => {
         done();
       });
   });
+
+  it('it should get all assumptions types', done => {
+    models.Assumption.bulkCreate([
+      {
+        userId: 1,
+        assumptionTypeId: 1,
+        percentage: 40,
+        isInitialValue: 0,
+        period: '2018-04',
+      },
+      {
+        userId: 1,
+        assumptionTypeId: 1,
+        percentage: 10,
+        isInitialValue: 0,
+        period: '2018-05',
+      },
+      {
+        userId: 1,
+        assumptionTypeId: 2,
+        percentage: 30,
+        isInitialValue: 0,
+        period: '2018-05',
+      },
+    ]).then(() => {
+      chai
+        .request(server)
+        .get('/api/assumptionTypes/1/2018-05')
+        .end((err, res) => {
+          console.log({ body: res.body });
+          res.should.have.status(200);
+          res.body[0].should.contains(
+            {
+              id: 1,
+              name: 'Poduszka bezpieczeństwa',
+              assigned: true,
+            },
+            {
+              id: 2,
+              name: 'Wakacje',
+              assigned: true,
+            },
+            {
+              id: 3,
+              name: 'Rachunki',
+              assigned: false,
+            },
+          );
+          done();
+        });
+    });
+  });
 });

@@ -63,6 +63,22 @@ export const getAssumptionsFromPeriod = ({ userId, period }) =>
       .catch(error => logger.error(error)),
   );
 
+export const getAssumptionTypesFromPeriod = ({ userId, period }) =>
+  new Promise(resolve =>
+    model.AssumptionType.findAll().then(AssumptionTypes => {
+      getAssumptionsFromDb({ userId, period }).then(assumptions =>
+        resolve(
+          AssumptionTypes.map(assumptionType => {
+            assumptionType.dataValues.assigned = assumptions.some(
+              assumption => assumptionType.id === assumption.AssumptionType.id,
+            );
+            return assumptionType;
+          }),
+        ),
+      );
+    }),
+  );
+
 const assumptionCalculation = ({ userId, period }) => {
   const assumptions = getAssumptionsFromDb({ userId, period });
   const profitSum = model.Profit.sum('value', { where: { userId, period } });
