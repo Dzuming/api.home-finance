@@ -503,17 +503,17 @@ describe('assumption', () => {
             {
               id: 1,
               name: 'Poduszka bezpieczeństwa',
-              assigned: true,
+              isAssigned: true,
             },
             {
               id: 2,
               name: 'Wakacje',
-              assigned: true,
+              isAssigned: true,
             },
             {
               id: 3,
               name: 'Rachunki',
-              assigned: false,
+              isAssigned: false,
             },
           );
           done();

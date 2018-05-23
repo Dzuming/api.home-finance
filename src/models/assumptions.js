@@ -69,7 +69,7 @@ export const getAssumptionTypesFromPeriod = ({ userId, period }) =>
       getAssumptionsFromDb({ userId, period }).then(assumptions =>
         resolve(
           AssumptionTypes.map(assumptionType => {
-            assumptionType.dataValues.assigned = assumptions.some(
+            assumptionType.dataValues.isAssigned = assumptions.some(
               assumption => assumptionType.id === assumption.AssumptionType.id,
             );
             return assumptionType;
