@@ -497,7 +497,6 @@ describe('assumption', () => {
         .request(server)
         .get('/api/assumptionTypes/1/2018-05')
         .end((err, res) => {
-          console.log({ body: res.body });
           res.should.have.status(200);
           res.body[0].should.contains(
             {
