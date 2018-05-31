@@ -5,6 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       assumptionTypeId: DataTypes.INTEGER,
       categoryId: DataTypes.INTEGER,
+      period: DataTypes.STRING,
     },
     {},
   );

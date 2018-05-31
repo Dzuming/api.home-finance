@@ -154,10 +154,12 @@ describe('assumption', () => {
       {
         assumptionTypeId: 3,
         categoryId: 1,
+        period: '2018-04',
       },
       {
         assumptionTypeId: 3,
         categoryId: 2,
+        period: '2018-04',
       },
     ];
 
@@ -267,10 +269,12 @@ describe('assumption', () => {
       {
         assumptionTypeId: 3,
         categoryId: 1,
+        period: '2018-04',
       },
       {
         assumptionTypeId: 3,
         categoryId: 2,
+        period: '2018-04',
       },
     ];
     const initialData = bluebird.all([

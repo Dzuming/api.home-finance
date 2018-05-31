@@ -52,7 +52,7 @@ export const getAssumptionsFromPeriod = ({ userId, period }) =>
   new Promise(resolve =>
     assumptionCalculation({ userId, period })
       .then(({ assumptions, profitSum }) => {
-        assumptionMap(assumptions, profitSum, userId, period)
+        assumptionMap(assumptions, profitSum, period)
           .then(mappedAssumptions => {
             mapValueForCategoryAssumptions(mappedAssumptions, userId, period)
               .then(assumptions => resolve(assumptions))
@@ -85,9 +85,12 @@ const assumptionCalculation = ({ userId, period }) => {
   return bluebird.props({ assumptions, profitSum });
 };
 
-const assumptionMap = (assumptions, profitSum) => {
+const assumptionMap = (assumptions, profitSum, period) => {
   return bluebird.map(assumptions, assumption => {
-    return getAssumptionCategoryFromDb(assumption.AssumptionType.id)
+    return getAssumptionCategoryWithPeriodFromDb(
+      assumption.AssumptionType.id,
+      period,
+    )
       .then(categoryTypeAssumptions => {
         const value = profitSum * assumption.percentage * 0.01;
         return {
@@ -159,6 +162,12 @@ const getAssumptionsFromDb = ({ userId, period }) =>
         attributes: ['id', 'name'],
       },
     ],
+  });
+
+const getAssumptionCategoryWithPeriodFromDb = (assumptionTypeId, period) =>
+  model.AssumptionTypeCategory.findAll({
+    where: { assumptionTypeId, period },
+    attributes: ['assumptionTypeId', 'categoryId'],
   });
 
 const getAssumptionCategoryFromDb = assumptionTypeId =>
