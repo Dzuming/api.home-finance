@@ -1,83 +1,65 @@
 import model from '../../db/models';
 import bluebird from 'bluebird';
-import logger from '../lib/logger';
 import { deleteParamFromObject } from '../lib/util';
 
 export const saveAssumption = assumption => model.Assumption.create(assumption);
 
-export const sumAssumptions = ({ userId }) =>
-  new Promise(resolve =>
-    getPeriodsFromDb().then(periods =>
-      bluebird
-        .map(periods, value => {
-          return getAssumptionsFromPeriod({
-            userId,
-            period: value.period,
-          }).then(assumption => {
-            return assumption;
-          });
-        })
-        .then(result => {
-          const flattenArray = [].concat.apply([], result);
-          resolve(sumSimilarAssumptions(flattenArray));
-        }),
-    ),
-  );
-
-const sumSimilarAssumptions = flattenArray => {
-  let sum = [];
-  return bluebird
-    .map(flattenArray, assumption => {
-      let existing = sum.filter(function(assumptionSum) {
-        return assumptionSum.name === assumption.name;
-      })[0];
-
-      if (!existing) {
-        sum.push({
-          name: assumption.name,
-          value: assumption.value,
-        });
-      } else {
-        existing.value = parseFloat(existing.value);
-        existing.value += parseFloat(assumption.value);
-        existing.value = existing.value.toFixed(2);
-      }
-    })
-    .then(() => {
-      return sum;
-    });
-};
-
-export const getAssumptionsFromPeriod = ({ userId, period }) =>
-  new Promise(resolve =>
-    assumptionCalculation({ userId, period })
-      .then(({ assumptions, profitSum }) => {
-        assumptionMap(assumptions, profitSum, period)
-          .then(mappedAssumptions => {
-            mapValueForCategoryAssumptions(mappedAssumptions, userId, period)
-              .then(assumptions => resolve(assumptions))
-              .catch(error => logger.error(error));
-          })
-          .catch(error => logger.error(error));
-      })
-      .catch(error => logger.error(error)),
-  );
-
-export const getAssumptionTypesFromPeriod = ({ userId, period }) =>
-  new Promise(resolve =>
-    model.AssumptionType.findAll().then(AssumptionTypes => {
-      getAssumptionsFromDb({ userId, period }).then(assumptions =>
-        resolve(
-          AssumptionTypes.map(assumptionType => {
-            assumptionType.dataValues.isAssigned = assumptions.some(
-              assumption => assumptionType.id === assumption.AssumptionType.id,
-            );
-            return assumptionType;
-          }),
-        ),
-      );
+export const sumAssumptions = async ({ userId }) => {
+  const periods = await getPeriodsFromDb();
+  const assumptions = await bluebird.map(periods, value =>
+    getAssumptionsFromPeriod({
+      userId,
+      period: value.period,
     }),
   );
+  const flattenArray = [].concat.apply([], assumptions);
+  return await sumSimilarAssumptions(flattenArray);
+};
+
+const sumSimilarAssumptions = async flattenArray => {
+  let sum = [];
+  await bluebird.map(flattenArray, assumption => {
+    let existing = sum.filter(function(assumptionSum) {
+      return assumptionSum.name === assumption.name;
+    })[0];
+
+    if (!existing) {
+      sum.push({
+        name: assumption.name,
+        value: assumption.value,
+      });
+    } else {
+      existing.value = parseFloat(existing.value);
+      existing.value += parseFloat(assumption.value);
+      existing.value = existing.value.toFixed(2);
+    }
+  });
+  return sum;
+};
+
+export const getAssumptionsFromPeriod = async ({ userId, period }) => {
+  const { assumptions, profitSum } = await assumptionCalculation({
+    userId,
+    period,
+  });
+  const mappedAssumptions = await assumptionMap(assumptions, profitSum, period);
+  return await setCategoriesValueToAssumption(
+    mappedAssumptions,
+    userId,
+    period,
+  );
+};
+
+export const getAssumptionTypesFromPeriod = async ({ userId, period }) => {
+  const assumptionTypes = await model.AssumptionType.findAll();
+  const assumptions = await getAssumptionsFromDb({ userId, period });
+  return assumptionTypes.map(assumptionType => {
+    assumptionType.dataValues.isAssigned = assumptions.some(
+      assumption => assumptionType.id === assumption.AssumptionType.id,
+    );
+    return assumptionType;
+  });
+};
 
 const assumptionCalculation = ({ userId, period }) => {
   const assumptions = getAssumptionsFromDb({ userId, period });
@@ -85,71 +67,64 @@ const assumptionCalculation = ({ userId, period }) => {
   return bluebird.props({ assumptions, profitSum });
 };
 
-const assumptionMap = (assumptions, profitSum, period) => {
-  return bluebird.map(assumptions, assumption => {
-    return getAssumptionCategoryWithPeriodFromDb(
+const assumptionMap = (assumptions, profitSum, period) =>
+  bluebird.map(assumptions, async assumption => {
+    const categoryTypeAssumptions = await getAssumptionCategoryWithPeriodFromDb(
       assumption.AssumptionType.id,
       period,
-    )
-      .then(categoryTypeAssumptions => {
-        const value = profitSum * assumption.percentage * 0.01;
-        return {
-          id: assumption.id,
-          name: assumption.AssumptionType.name,
-          percentage: assumption.percentage,
-          value: !isNaN(value) ? value.toFixed(2) : 0,
-          limit: !isNaN(value) ? value.toFixed(2) : 0,
-          categoryTypeAssumptions,
-        };
-      })
-      .catch(error => logger.error(error));
+    );
+    const value = profitSum * assumption.percentage * 0.01;
+    return {
+      id: assumption.id,
+      name: assumption.AssumptionType.name,
+      percentage: assumption.percentage,
+      value: !isNaN(value) ? value.toFixed(2) : 0,
+      limit: !isNaN(value) ? value.toFixed(2) : 0,
+      categoryTypeAssumptions,
+    };
   });
-};
 
-const mapValueForCategoryAssumptions = (mappedAssumptions, userId, period) => {
-  let index = 0;
-  return new Promise(resolve => {
-    if (mappedAssumptions.length === 0) {
-      resolve([]);
+const setCategoriesValueToAssumption = async (
+  mappedAssumptions,
+  userId,
+  period,
+) => {
+  if (mappedAssumptions.length === 0) {
+    return [];
+  }
+  await bluebird.map(mappedAssumptions, async assumption => {
+    const sumSpendingByCategory = await sumCategorySpending(
+      assumption,
+      userId,
+      period,
+    );
+    const isArrayGreaterThanZero =
+      Array.isArray(assumption.categoryTypeAssumptions) &&
+      assumption.categoryTypeAssumptions.length > 0;
+    if (isArrayGreaterThanZero) {
+      assumption.value = sumSpendingByCategory.toFixed(2);
     }
-    return bluebird.map(mappedAssumptions, mappedAssumption => {
-      sumCategorySpending(mappedAssumption, userId, period).then(result => {
-        const isArrayGreaterThanZero =
-          Array.isArray(mappedAssumption.categoryTypeAssumptions) &&
-          mappedAssumption.categoryTypeAssumptions.length > 0;
-        if (isArrayGreaterThanZero) {
-          mappedAssumption.value = result.toFixed(2);
-        }
-        index++;
-        const isLastMappedElement = index === mappedAssumptions.length;
-        if (isLastMappedElement) {
-          deleteParamFromObject(mappedAssumptions, 'categoryTypeAssumptions');
-          resolve(mappedAssumptions);
-        }
-      });
-    });
   });
+  deleteParamFromObject(mappedAssumptions, 'categoryTypeAssumptions');
+  return mappedAssumptions;
 };
 
 const sumCategorySpending = (mappedAssumption, userId, period) => {
-  return bluebird
-    .reduce(
-      mappedAssumption.categoryTypeAssumptions,
-      (total, categoryAssumption) => {
-        return getSpendingByCategoryFromDb(
-          categoryAssumption.categoryId,
-          userId,
-          period,
-        )
-          .then(value => {
-            return total + parseInt(value, 10);
-          })
-          .catch(error => logger.error(error));
-      },
-      0,
-    )
-    .then(spendingCategorySum => spendingCategorySum)
-    .catch(error => logger.error(error));
+  return bluebird.reduce(
+    mappedAssumption.categoryTypeAssumptions,
+    async (total, categoryAssumption) => {
+      let spendingByCategory = await getSpendingByCategoryFromDb(
+        categoryAssumption.categoryId,
+        userId,
+        period,
+      );
+      spendingByCategory = isNaN(spendingByCategory)
+        ? 0
+        : parseInt(spendingByCategory, 10);
+      return total + spendingByCategory;
+    },
+    0,
+  );
 };
 
 const getAssumptionsFromDb = ({ userId, period }) =>
@@ -167,12 +142,6 @@ const getAssumptionsFromDb = ({ userId, period }) =>
 const getAssumptionCategoryWithPeriodFromDb = (assumptionTypeId, period) =>
   model.AssumptionTypeCategory.findAll({
     where: { assumptionTypeId, period },
-    attributes: ['assumptionTypeId', 'categoryId'],
-  });
-
-const getAssumptionCategoryFromDb = assumptionTypeId =>
-  model.AssumptionTypeCategory.findAll({
-    where: { assumptionTypeId },
     attributes: ['assumptionTypeId', 'categoryId'],
   });
 
