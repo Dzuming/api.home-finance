@@ -2,7 +2,26 @@ import model from '../../db/models';
 import bluebird from 'bluebird';
 import { deleteParamFromObject } from '../lib/util';
 
-export const saveAssumption = assumption => model.Assumption.create(assumption);
+export const createAssumption = async assumption => {
+  const newAssumption = await saveAssumption(assumption);
+  if (Array.isArray(assumption.categoryIds)) {
+    assumption.categoryIds.map(
+      async categoryId =>
+        await saveAssumptionTypeCategory({
+          assumptionTypeId: assumption.assumptionTypeId,
+          categoryId,
+        }),
+    );
+  }
+
+  return newAssumption;
+};
+
+const saveAssumption = assumption =>
+  model.Assumption.create(assumption, { raw: true });
+
+const saveAssumptionTypeCategory = ({ assumptionTypeId, categoryId }) =>
+  model.AssumptionTypeCategory.create({ assumptionTypeId, categoryId });
 
 export const sumAssumptions = async ({ userId }) => {
   const periods = await getPeriodsFromDb();

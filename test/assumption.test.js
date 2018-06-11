@@ -590,6 +590,48 @@ describe('assumption', () => {
       percentage: 20,
       isInitialValue: 0,
       period: '2018-04',
+      categoryIds: [1, 2],
+    };
+    chai
+      .request(server)
+      .post('/api/assumptions')
+      .set('X-API-Key', 'foobar')
+      .send(assumption)
+      .end(async (err, res) => {
+        const assumptionTypeCategories = await models.AssumptionTypeCategory.findAll(
+          {
+            raw: true,
+          },
+        );
+        assumptionTypeCategories[0].should.contains({
+          assumptionTypeId: 1,
+          categoryId: 1,
+        });
+        assumptionTypeCategories[1].should.contains({
+          assumptionTypeId: 1,
+          categoryId: 2,
+        });
+        res.should.have.status(200);
+        res.body.should.be.a('object');
+        res.body.should.contains({
+          id: 1,
+          userId: 1,
+          assumptionTypeId: 1,
+          percentage: 20,
+          isInitialValue: false,
+          period: '2018-04',
+        });
+        done();
+      });
+  });
+
+  it('it should add assumption if no category', done => {
+    const assumption = {
+      userId: 1,
+      assumptionTypeId: 1,
+      percentage: 20,
+      isInitialValue: 0,
+      period: '2018-04',
     };
     chai
       .request(server)

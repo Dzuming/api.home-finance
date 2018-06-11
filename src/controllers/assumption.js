@@ -2,7 +2,7 @@ import logger from '../lib/logger';
 import {
   sumAssumptions,
   getAssumptionsFromPeriod,
-  saveAssumption,
+  createAssumption,
   getAssumptionTypesFromPeriod,
 } from '../models/assumptions';
 import resource from 'resource-router-middleware';
@@ -12,7 +12,7 @@ export default () =>
     /** POST / - Create a new entity */
     create(data, res) {
       const assumption = data.body;
-      saveAssumption(assumption)
+      createAssumption(assumption)
         .then(assumption => res.json(assumption))
         .catch(error => logger.error(error));
     },
