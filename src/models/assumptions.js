@@ -10,6 +10,7 @@ export const createAssumption = async assumption => {
         await saveAssumptionTypeCategory({
           assumptionTypeId: assumption.assumptionTypeId,
           categoryId,
+          period: assumption.period,
         }),
     );
   }
@@ -20,8 +21,8 @@ export const createAssumption = async assumption => {
 const saveAssumption = assumption =>
   model.Assumption.create(assumption, { raw: true });
 
-const saveAssumptionTypeCategory = ({ assumptionTypeId, categoryId }) =>
-  model.AssumptionTypeCategory.create({ assumptionTypeId, categoryId });
+const saveAssumptionTypeCategory = ({ assumptionTypeId, categoryId, period }) =>
+  model.AssumptionTypeCategory.create({ assumptionTypeId, categoryId, period });
 
 export const sumAssumptions = async ({ userId }) => {
   const periods = await getPeriodsFromDb();

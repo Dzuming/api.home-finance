@@ -606,10 +606,12 @@ describe('assumption', () => {
         assumptionTypeCategories[0].should.contains({
           assumptionTypeId: 1,
           categoryId: 1,
+          period: '2018-04',
         });
         assumptionTypeCategories[1].should.contains({
           assumptionTypeId: 1,
           categoryId: 2,
+          period: '2018-04',
         });
         res.should.have.status(200);
         res.body.should.be.a('object');
